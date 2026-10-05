@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buen prompt o mal prompt · Actividad 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#ECEFF2; --paper:#FFFFFF; --ink:#1B2430; --ink-2:#4A5563; --ink-3:#6B7480;
+  --line:#D5DAE0; --accent:#1F4E79; --accent-ink:#FFFFFF; --accent-soft:#E3ECF5;
+  --ok:#2E7D46; --ok-bg:#DCF1E2; --bad:#B42323; --bad-bg:#FDE2E2; --warn:#9A6B00; --warn-bg:#FFF1C7;
+  --good-zone:#1E6B45; --good-zone-bg:#EAF6EF; --bad-zone:#A23434; --bad-zone-bg:#FBEDED;
+  --serif:"Source Serif 4", Georgia, serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+.hidden{display:none !important}
+
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:18px}
+.brand{font-weight:700;font-size:15px}
+.brand small{display:block;font-weight:500;color:var(--ink-3);font-size:12px}
+.spacer{flex:1}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--ink-2);background:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:10px 18px;font-weight:600;min-height:44px}
+.btn:hover{border-color:var(--ink-3)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:#173D60}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
+
+/* Inicio */
+.intro{max-width:760px;margin:24px auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:36px}
+@media (max-width:600px){.intro{padding:24px 20px}}
+.kicker{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.intro h1{font-family:var(--serif);font-size:34px;margin:8px 0 12px;line-height:1.15}
+.intro p{color:var(--ink-2);margin:0 0 12px}
+.intro ol{color:var(--ink-2);padding-left:20px;margin:8px 0 20px}
+.intro ol li{margin:6px 0}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:12px 0 16px}
+.checks div{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--ink-2)}
+.checks b{display:block;color:var(--ink);font-size:14px}
+.field{display:flex;flex-direction:column;gap:6px;margin:20px 0 8px}
+.field label{font-weight:600;font-size:14px}
+.field input{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:8px;min-height:44px}
+.field input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.err{color:var(--bad);font-size:14px;min-height:20px}
+
+/* Tablero */
+.board-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+.board-head h2{margin:0;font-size:18px}
+.board-head p{margin:0;color:var(--ink-3);font-size:14px}
+.pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;min-height:80px;padding:12px;border-radius:12px;border:2px dashed transparent;transition:border-color .15s,background .15s}
+.pool.empty-pool{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:14px;border-color:var(--line)}
+.board{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:24px;align-items:start}
+.board .pool{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.zones{display:grid;grid-template-rows:1fr 1fr;gap:14px;position:sticky;top:76px;height:calc(100vh - 92px);min-height:480px}
+.zones .zone{min-height:0;overflow:auto}
+@media (max-width:960px){.board{grid-template-columns:1fr}.zones{position:static;height:auto;grid-template-rows:none;grid-template-columns:1fr 1fr;min-height:0}.zones .zone{min-height:220px;overflow:visible}}
+@media (max-width:600px){.zones{grid-template-columns:1fr}}
+.zone{border-radius:14px;border:2px dashed;min-height:220px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:transform .12s, box-shadow .12s}
+.zone.good{border-color:var(--good-zone);background:var(--good-zone-bg)}
+.zone.bad{border-color:var(--bad-zone);background:var(--bad-zone-bg)}
+.zone-h{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;border:0;background:transparent;padding:4px 2px;text-align:left;min-height:44px;width:100%;border-radius:8px;color:inherit}
+.zone.good .zone-h{color:var(--good-zone)} .zone.bad .zone-h{color:var(--bad-zone)}
+.zone-h .ico{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.zone.good .ico{background:var(--good-zone)} .zone.bad .ico{background:var(--bad-zone)}
+.zone-h .count{margin-left:auto;font-size:14px;font-weight:600;opacity:.8}
+.zone-cards{display:flex;flex-direction:column;gap:10px;flex:1}
+.zone-hint{font-size:13px;color:var(--ink-3);text-align:center;margin:auto 0}
+.drop-over{box-shadow:0 0 0 4px rgba(31,78,121,.25);transform:scale(1.01)}
+.pool.drop-over{border-color:var(--accent);background:var(--accent-soft);transform:none}
+.armed .zone-h{text-decoration:underline;text-underline-offset:4px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);position:relative;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;text-align:left;width:100%;color:var(--ink);display:block}
+.card:hover{border-color:var(--ink-3)}
+.card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,78,121,.3)}
+.card .task{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.card .task .n{background:var(--ink);color:#fff;border-radius:4px;padding:1px 6px;letter-spacing:0}
+.card .txt{font-family:var(--mono);font-size:13.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.card.dragging-src{opacity:.35}
+.ghost{position:fixed;z-index:100;pointer-events:none;width:300px;transform:rotate(2deg);box-shadow:0 16px 40px rgba(15,25,40,.25);cursor:grabbing}
+.zone .card .txt{font-size:12.5px}
+
+.tip{font-size:13px;color:var(--ink-3);margin-top:8px}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,22,32,.45);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--paper);border-radius:14px;max-width:440px;width:100%;padding:24px}
+.modal h3{margin:0 0 8px} .modal p{color:var(--ink-2);margin:0 0 18px}
+.modal .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+/* Resultados */
+.score-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px 28px;margin-bottom:20px}
+@media (max-width:700px){.score-head{grid-template-columns:1fr}}
+.score{font-family:var(--serif);font-size:72px;font-weight:700;line-height:1;color:var(--accent)}
+.score small{font-size:24px;color:var(--ink-3)}
+.score-head h2{margin:0 0 4px;font-size:22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600}
+.stat b{font-size:18px;display:block}
+.send{font-size:13px;color:var(--ink-3);margin-top:10px}
+.send.ok{color:var(--ok)} .send.bad{color:var(--bad)}
+.filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filter button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 12px;font-size:14px;min-height:40px}
+.filter button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+.res-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:16px}
+@media (max-width:600px){.res-list{grid-template-columns:1fr}}
+.res{background:var(--paper);border:1px solid var(--line);border-top:5px solid;border-radius:12px;padding:16px 18px}
+.res.hit{border-top-color:var(--ok)} .res.miss{border-top-color:var(--bad)}
+.res .h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.res .st{font-size:12px;font-weight:700;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:.05em}
+.res.hit .st{background:var(--ok-bg);color:var(--ok)} .res.miss .st{background:var(--bad-bg);color:var(--bad)}
+.res .ans{font-size:13px;color:var(--ink-2)}
+.res .task{font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.res .txt{font-family:var(--mono);font-size:13px;background:var(--ground);border-radius:8px;padding:10px 12px;white-space:pre-wrap;word-break:break-word;margin:6px 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.chip{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid}
+.chip.si{color:var(--ok);background:var(--ok-bg);border-color:#B5DEC2}
+.chip.no{color:var(--bad);background:var(--bad-bg);border-color:#F2BDBD}
+.chip.riesgo{color:var(--warn);background:var(--warn-bg);border-color:#EED48A}
+.res .why{margin:0 0 10px;font-size:14.5px}
+.better{border-left:3px solid var(--good-zone);background:var(--good-zone-bg);border-radius:0 8px 8px 0;padding:10px 12px}
+.better b{font-size:12px;color:var(--good-zone);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px}
+.better .txt{background:transparent;padding:0;margin:0}
+.foot{color:var(--ink-3);font-size:12px;text-align:center;margin-top:32px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="back" href="../" aria-label="Volver a la portada del curso">&larr;</a>
+    <div class="brand">Buen prompt o mal prompt<small id="brandSub"></small></div>
+    <div class="spacer"></div>
+    <span class="pill hidden" id="whoPill"></span>
+    <span class="pill hidden" id="countPill"></span>
+    <button class="btn btn-primary hidden" id="submitBtn" type="button">Entregar</button>
+  </div>
+</header>
+
+<main>
+  <!-- INICIO -->
+  <section id="scrStart" class="intro">
+    <div class="kicker" id="kicker"></div>
+    <h1>¿Este prompt le sirve a un abogado o lo va a meter en problemas?</h1>
+    <p>Vas a ver 12 prompts que abogados le escribieron a una herramienta de IA. Algunos están bien redactados; otros son ambiguos, ponen en riesgo al cliente o invitan a la IA a inventar.</p>
+    <ol>
+      <li>Lee cada tarjeta.</li>
+      <li>Arrástrala a la casilla <b>Buen prompt</b> o <b>Mal prompt</b>. También puedes tocar la tarjeta y luego tocar la casilla.</li>
+      <li>Puedes cambiar de opinión y moverla las veces que quieras.</li>
+      <li>Cuando las 12 estén clasificadas, presiona <b>Entregar</b>.</li>
+    </ol>
+    <p>Para decidir, fíjate si el prompt tiene estos elementos:</p>
+    <div class="checks" id="checksStart"></div>
+    <p><b>Ojo:</b> un prompt largo no siempre es bueno, y uno corto no siempre es malo.</p>
+    <div class="field">
+      <label for="nameInput">Nombre completo</label>
+      <input id="nameInput" autocomplete="name" placeholder="Ej.: Ana Pérez Gutiérrez">
+    </div>
+    <div class="err" id="nameErr" role="alert"></div>
+    <button class="btn btn-primary" id="startBtn" type="button">Comenzar actividad</button>
+  </section>
+
+  <!-- TABLERO -->
+  <section id="scrWork" class="hidden">
+    <div class="board"><div>
+    <div class="board-head">
+      <h2>Prompts por clasificar</h2>
+      <p id="poolHint">Arrastra cada tarjeta a una casilla, o tócala y luego toca la casilla.</p>
+    </div>
+    <div class="pool" id="pool" data-zone="pool" aria-label="Prompts por clasificar"></div>
+    </div>
+    <div class="zones">
+      <div class="zone good" id="zoneGood" data-zone="good">
+        <button class="zone-h" type="button" data-target="good">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+          Buen prompt <span class="count" id="cntGood">0</span>
+        </button>
+        <div class="zone-cards" id="cardsGood"><div class="zone-hint">Suelta aquí los prompts bien redactados</div></div>
+      </div>
+      <div class="zone bad" id="zoneBad" data-zone="bad">
+        <button class="zone-h" type="button" data-target="bad">
+          <span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+          Mal prompt <span class="count" id="cntBad">0</span>
+        </button>
+        <div class="zone-cards" id="cardsBad"><div class="zone-hint">Suelta aquí los prompts ambiguos o riesgosos</div></div>
+      </div>
+    </div>
+    </div>
+    <p class="tip">Para devolver una tarjeta al mazo, arrástrala de nuevo a la zona de prompts por clasificar.</p>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="scrResult" class="hidden">
+    <div class="score-head">
+      <div class="score" id="scoreNum">0<small>/100</small></div>
+      <div>
+        <h2 id="scoreTitle"></h2>
+        <div id="scoreMsg" style="color:var(--ink-2)"></div>
+        <div class="stats" id="stats"></div>
+        <div class="send" id="sendStatus"></div>
+      </div>
+    </div>
+    <div class="filter" id="filter"></div>
+    <div class="res-list" id="resList"></div>
+  </section>
+  <div class="foot">Prompts y casos ficticios con fines educativos.</div>
+</main>
+
+<script src="../config.js"></script>
+<div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
+
+<script>
+const CC = window.CURSO_CONFIG || {};
+const CONFIG = {
+  SHEETS_URL: CC.SHEETS_URL || '',
+  CURSO: CC.CURSO || 'IA para abogados',
+  ACTIVIDAD: 'Módulo 2 · Actividad 2: Buen prompt o mal prompt',
+  HOJA: 'Actividad 2 · Prompts',
+};
+
+/* Elementos que se evalúan en cada prompt */
+const ELEM = {
+  rol:      {n:'Rol',               d:'Le dice a la IA desde qué especialidad responder'},
+  contexto: {n:'Contexto y país',   d:'Hechos, materia y jurisdicción (Bolivia)'},
+  tarea:    {n:'Tarea concreta',    d:'Qué debe hacer exactamente'},
+  formato:  {n:'Formato de salida', d:'Tabla, viñetas, extensión, público'},
+  limites:  {n:'Límites',           d:'Qué no hacer, cómo tratar la duda'},
+  datos:    {n:'Datos protegidos',  d:'Sin datos personales del cliente'},
+};
+
+/* =====================================================================
+   PROMPTS
+   ok: true = buen prompt, false = mal prompt
+   el: estado de cada elemento: si | no | riesgo (se omite si no aplica)
+   e: explicación · m: versión mejorada (solo para los malos)
+   ===================================================================== */
+const PROMPTS = [
+  { id:'p01', ok:false, tarea:'Contratos',
+    t:'Hazme un contrato de alquiler.',
+    el:{rol:'no',contexto:'no',tarea:'riesgo',formato:'no',limites:'no',datos:'si'},
+    e:'Es ambiguo: no dice qué se alquila (vivienda, local, terreno), quiénes son las partes, el plazo, el monto ni la ley aplicable. La IA va a rellenar los vacíos con suposiciones, posiblemente con normativa de otro país.',
+    m:'Actúa como abogado civilista en Bolivia. Redacta un contrato de alquiler de vivienda en La Paz entre [PROPIETARIO] y [INQUILINO], por 12 meses, con un canon mensual de [MONTO] y una garantía de dos meses. Incluye cláusulas de mantenimiento, causales de resolución anticipada y devolución de la garantía. Usa lenguaje formal y numera las cláusulas. Al final, señala qué datos debo completar.'},
+  { id:'p02', ok:false, tarea:'Derecho laboral',
+    t:'Revisa este finiquito de mi cliente Juan Carlos Mendoza Ríos, CI 5.432.198 LP, que trabajó en Importadora Sol S.A. desde 2018 con un sueldo de Bs 6.500, y dime si está bien calculado.',
+    el:{rol:'no',contexto:'riesgo',tarea:'si',formato:'no',limites:'no',datos:'no'},
+    e:'La tarea es clara, pero expone el nombre, la cédula y el empleador del cliente: es lo que aprendiste a evitar en la Actividad 1. Además no pide explicar el cálculo ni indica qué normativa usar, así que no podrás verificar la respuesta.',
+    m:'Actúa como abogado laboralista en Bolivia. Revisa el cálculo del finiquito que te comparto de [TRABAJADOR], con [AÑOS] años de antigüedad y un salario de [MONTO], por retiro [voluntario/forzoso]. Presenta en una tabla cada concepto, su base legal y el cálculo paso a paso, e indica las diferencias con el finiquito entregado. Si algún dato es insuficiente, dímelo en vez de suponerlo.'},
+  { id:'p03', ok:false, tarea:'Jurisprudencia',
+    t:'Dame 5 autos supremos del Tribunal Supremo de Justicia de Bolivia que digan que el despido por WhatsApp es nulo, con su número y fecha.',
+    el:{rol:'no',contexto:'si',tarea:'si',formato:'si',limites:'no',datos:'si'},
+    e:'Parece preciso, pero es peligroso: pide citas exactas y además da por hecha la conclusión ("que digan que es nulo"). La IA tiende a complacer y puede inventar números y fechas de fallos que no existen. Ya hubo abogados sancionados en otros países por presentar jurisprudencia inventada por IA.',
+    m:'Te comparto el texto de tres autos supremos sobre despido. Usando solo esos textos, dime si alguno se pronuncia sobre la validez de la comunicación del despido por medios electrónicos, con una cita textual que lo respalde. Si ninguno trata el tema, dilo. No menciones fallos que no estén en los documentos.'},
+  { id:'p04', ok:false, tarea:'Estrategia',
+    t:'Eres el mejor abogado del mundo, con 50 años de experiencia, ganador de todos los premios y nunca te equivocas. Necesito que me ayudes con algo muy importante para mi carrera; es urgentísimo y mi cliente está muy preocupado, así que esfuérzate al máximo y da lo mejor de ti, porque de esto depende todo. Analiza el caso y dime qué hacer.',
+    el:{rol:'riesgo',contexto:'no',tarea:'no',formato:'no',limites:'no',datos:'si'},
+    e:'Es largo, pero no dice nada útil: los elogios y la urgencia no mejoran la respuesta, y "el caso" nunca se describe. Además, "nunca te equivocas" empuja a la IA a responder con exceso de seguridad. Un prompt no se mide por su largo, sino por la información útil que trae.',
+    m:'Actúa como abogado litigante en materia civil en Bolivia. Hechos: [resumen anonimizado en 5 líneas]. Etapa procesal: [etapa]. Analiza las tres opciones procesales más viables, con ventajas, riesgos y plazos de cada una, en una tabla. Indica qué información adicional necesitarías para recomendar una.'},
+  { id:'p05', ok:false, tarea:'Recursos',
+    t:'Redacta un memorial de apelación muy detallado y exhaustivo, pero que no pase de media página, en tono formal pero coloquial, y cita toda la normativa aplicable sin mencionar artículos.',
+    el:{rol:'no',contexto:'no',tarea:'riesgo',formato:'riesgo',limites:'riesgo',datos:'si'},
+    e:'Las instrucciones se contradicen: "exhaustivo" y "media página", "formal" y "coloquial", "citar normativa" y "sin artículos". Ante órdenes contradictorias, la IA elige una al azar o las mezcla. Además falta lo esencial: qué resolución se apela y con qué agravios.',
+    m:'Actúa como abogado procesalista en Bolivia. Redacta un memorial de apelación contra la sentencia que te resumo: [resumen anonimizado]. Desarrolla los dos agravios siguientes: [agravio 1] y [agravio 2]. Tono formal, máximo dos páginas, citando los artículos del Código Procesal Civil que correspondan. Marca entre corchetes las citas que yo deba verificar.'},
+  { id:'p06', ok:false, tarea:'Plazos procesales',
+    t:'¿Cuál es el plazo para apelar una sentencia en un proceso civil?',
+    el:{rol:'no',contexto:'no',tarea:'si',formato:'no',limites:'no',datos:'si'},
+    e:'La pregunta es clara, pero no dice el país. La IA puede responder con el plazo de España, México o Argentina, y ese error en un plazo procesal puede hacerte perder el recurso. Siempre indica la jurisdicción y el tipo de proceso, y pide la norma para verificarla.',
+    m:'Según el Código Procesal Civil de Bolivia (Ley N° 439), ¿cuál es el plazo para interponer recurso de apelación contra una sentencia en un proceso ordinario? Indica el artículo y desde cuándo se computa. Si no estás seguro, dilo para que lo verifique en la norma.'},
+  { id:'p07', ok:true, tarea:'Comunicación con el cliente',
+    t:'Resume en 5 viñetas, en lenguaje sencillo para un cliente sin formación jurídica, el siguiente auto de admisión de demanda: [texto del auto, sin datos personales].',
+    el:{tarea:'si',formato:'si',contexto:'si',datos:'si'},
+    e:'Es corto, pero completo para lo que pide: la tarea (resumir), el público (cliente sin formación jurídica), el formato (5 viñetas) y el insumo, ya anonimizado. No hace falta un rol ni un párrafo de contexto cuando el documento ya trae toda la información.'},
+  { id:'p08', ok:true, tarea:'Derecho laboral',
+    t:'Actúa como abogado laboralista en Bolivia. Explícame qué conceptos componen el finiquito de un trabajador con 6 años de antigüedad que renuncia voluntariamente. Presenta la respuesta en una tabla con tres columnas: concepto, base legal y forma de cálculo. Si algún punto depende de normativa que no conoces con certeza, indícalo.',
+    el:{rol:'si',contexto:'si',tarea:'si',formato:'si',limites:'si',datos:'si'},
+    e:'Tiene todos los elementos: rol, jurisdicción, un caso concreto sin datos personales, formato de tabla y una instrucción para que la IA reconozca lo que no sabe en vez de inventarlo.'},
+  { id:'p09', ok:true, tarea:'Revisión contractual',
+    t:'Te comparto un contrato de prestación de servicios en el que reemplacé los datos de las partes por [CONTRATANTE] y [CONTRATISTA]. Identifica las cláusulas que perjudican a [CONTRATISTA], explica el riesgo de cada una y propón una redacción alternativa. Responde en una tabla de tres columnas: cláusula, riesgo y redacción propuesta.',
+    el:{contexto:'si',tarea:'si',formato:'si',datos:'si'},
+    e:'Aplica la anonimización con marcadores consistentes, define desde qué lado se analiza el contrato (el de [CONTRATISTA]) y pide un formato que se puede revisar y llevar al cliente.'},
+  { id:'p10', ok:true, tarea:'Jurisprudencia',
+    t:'Te adjunto el texto de tres autos supremos sobre despido injustificado. Usando solo esos textos, extrae el criterio jurídico de cada uno con una cita textual que lo respalde. Si alguno no trata el tema, dilo. No agregues fallos que no estén en los documentos.',
+    el:{contexto:'si',tarea:'si',formato:'si',limites:'si',datos:'si'},
+    e:'Es la forma segura de trabajar con jurisprudencia: tú das las fuentes, la IA solo las analiza y cada afirmación viene con una cita textual que puedes verificar. Compáralo con el prompt que pide "5 autos supremos con número y fecha".'},
+  { id:'p11', ok:true, tarea:'Litigación oral',
+    t:'Estoy preparando un alegato oral de 10 minutos para una audiencia de cumplimiento de contrato en un juzgado civil de La Paz. Hechos: [resumen anonimizado]. Propón una estructura en cuatro partes con el tiempo sugerido para cada una y los dos argumentos más fuertes. No redactes el alegato completo.',
+    el:{contexto:'si',tarea:'si',formato:'si',limites:'si',datos:'si'},
+    e:'Da contexto preciso (tipo de audiencia, juzgado, duración), pide un producto concreto y pone un límite claro: la IA ayuda a estructurar, pero el alegato lo construye el abogado.'},
+  { id:'p12', ok:true, tarea:'Contratos',
+    t:'Necesito redactar un contrato de anticrético sobre un inmueble urbano en Cochabamba. Antes de redactarlo, hazme las preguntas que necesites para completar los datos esenciales (partes, monto, plazo, estado del inmueble) y espera mis respuestas.',
+    el:{contexto:'si',tarea:'si',limites:'si',datos:'si'},
+    e:'Es una buena técnica: en vez de dejar que la IA suponga, le pides que primero te pregunte lo que falta. Compáralo con "Hazme un contrato de alquiler": la tarea es parecida, pero este prompt evita que la IA rellene los vacíos con datos inventados.'},
+];
+
+/* ============ Estado ============ */
+const STORE_KEY='prompts-act2-v1';
+let state={name:'', started:0, order:[], place:{}, submitted:null, attempts:0};
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+function load(){ try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)||'null'); if(s&&typeof s==='object') state=Object.assign(state,s); }catch(e){} }
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const P=Object.fromEntries(PROMPTS.map(p=>[p.id,p]));
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ============ Tablero ============ */
+let selectedId=null;
+function cardEl(id, num){
+  const p=P[id]; const b=document.createElement('div');
+  b.className='card'; b.tabIndex=0; b.dataset.id=id; b.setAttribute('role','button');
+  b.setAttribute('aria-label','Prompt '+num+'. '+p.t+'. Presiona Enter para seleccionarlo y luego elige una casilla.');
+  b.innerHTML='<div class="task"><span class="n">'+num+'</span>'+esc(p.tarea)+'</div><div class="txt">'+esc(p.t)+'</div>';
+  if(id===selectedId) b.classList.add('selected');
+  b.addEventListener('pointerdown', onPointerDown);
+  b.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleSelect(id); } });
+  return b;
+}
+function render(){
+  const pool=$('pool'), g=$('cardsGood'), bd=$('cardsBad');
+  pool.innerHTML=''; g.innerHTML=''; bd.innerHTML='';
+  let nPool=0,nG=0,nB=0;
+  state.order.forEach((id,i)=>{
+    const where=state.place[id]||'pool'; const el=cardEl(id,i+1);
+    if(where==='good'){ g.appendChild(el); nG++; } else if(where==='bad'){ bd.appendChild(el); nB++; } else { pool.appendChild(el); nPool++; }
+  });
+  if(!nG) g.innerHTML='<div class="zone-hint">Suelta aquí los prompts bien redactados</div>';
+  if(!nB) bd.innerHTML='<div class="zone-hint">Suelta aquí los prompts ambiguos o riesgosos</div>';
+  pool.classList.toggle('empty-pool', nPool===0);
+  if(!nPool) pool.textContent='Clasificaste todos los prompts. Revisa tus casillas y presiona Entregar.';
+  $('cntGood').textContent=nG; $('cntBad').textContent=nB;
+  $('countPill').textContent=(nG+nB)+' de '+PROMPTS.length+' clasificados';
+  document.querySelectorAll('.zone').forEach(z=>z.classList.toggle('armed', !!selectedId));
+  save();
+}
+function moveTo(id, zone){ state.place[id]=zone; selectedId=null; render(); }
+function toggleSelect(id){
+  selectedId = selectedId===id ? null : id; render();
+  if(selectedId){ const el=document.querySelector('.card[data-id="'+id+'"]'); el&&el.focus(); }
+}
+document.querySelectorAll('.zone-h').forEach(h=>h.addEventListener('click',()=>{ if(selectedId) moveTo(selectedId, h.dataset.target); }));
+$('pool').addEventListener('click', e=>{ if(selectedId && !e.target.closest('.card') && state.place[selectedId]!=='pool') moveTo(selectedId,'pool'); });
+document.querySelectorAll('.zone').forEach(z=>z.addEventListener('click', e=>{ if(selectedId && !e.target.closest('.card') && !e.target.closest('.zone-h')) moveTo(selectedId, z.dataset.zone); }));
+
+/* Arrastrar y soltar (mouse y dedo) */
+let drag=null;
+function onPointerDown(e){
+  if(e.button!==undefined && e.button!==0) return;
+  const card=e.currentTarget; const r=card.getBoundingClientRect();
+  drag={id:card.dataset.id, src:card, x0:e.clientX, y0:e.clientY, dx:e.clientX-r.left, dy:e.clientY-r.top, w:r.width, moved:false, ghost:null, over:null, pid:e.pointerId};
+  card.setPointerCapture(e.pointerId);
+  card.addEventListener('pointermove', onPointerMove);
+  card.addEventListener('pointerup', onPointerUp);
+  card.addEventListener('pointercancel', onPointerCancel);
+}
+function zoneAt(x,y){
+  const el=document.elementFromPoint(x,y); if(!el) return null;
+  const z=el.closest('[data-zone]'); return z;
+}
+function onPointerMove(e){
+  if(!drag) return;
+  if(!drag.moved){
+    if(Math.hypot(e.clientX-drag.x0, e.clientY-drag.y0) < 6) return;
+    drag.moved=true;
+    const g=drag.src.cloneNode(true); g.classList.add('ghost'); g.classList.remove('selected'); g.style.width=Math.min(drag.w,320)+'px';
+    document.body.appendChild(g); drag.ghost=g; drag.src.classList.add('dragging-src');
+    drag.dx=Math.min(drag.dx, Math.min(drag.w,320)-20);
+  }
+  drag.ghost.style.left=(e.clientX-drag.dx)+'px'; drag.ghost.style.top=(e.clientY-drag.dy)+'px';
+  const z=zoneAt(e.clientX,e.clientY);
+  if(z!==drag.over){ drag.over&&drag.over.classList.remove('drop-over'); drag.over=z; z&&z.classList.add('drop-over'); }
+  // desplazamiento automático cerca de los bordes
+  if(e.clientY > window.innerHeight-60) window.scrollBy(0,14); else if(e.clientY < 90) window.scrollBy(0,-14);
+}
+function endDrag(){
+  if(!drag) return;
+  const c=drag.src; c.removeEventListener('pointermove',onPointerMove); c.removeEventListener('pointerup',onPointerUp); c.removeEventListener('pointercancel',onPointerCancel);
+  drag.ghost&&drag.ghost.remove(); drag.over&&drag.over.classList.remove('drop-over'); c.classList.remove('dragging-src');
+}
+function onPointerUp(e){
+  if(!drag) return;
+  const d=drag; endDrag(); drag=null;
+  if(!d.moved){ toggleSelect(d.id); return; }
+  const z=zoneAt(e.clientX,e.clientY);
+  if(z) moveTo(d.id, z.dataset.zone); else render();
+}
+function onPointerCancel(){ endDrag(); drag=null; render(); }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && selectedId){ selectedId=null; render(); } });
+
+/* ============ Modal ============ */
+function modal(title,text,actions){
+  $('modalT').textContent=title; $('modalP').textContent=text; const a=$('modalA'); a.innerHTML='';
+  actions.forEach(([l,primary,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='btn'+(primary?' btn-primary':''); b.textContent=l; b.onclick=()=>{ $('modal').classList.add('hidden'); fn&&fn(); }; a.appendChild(b); });
+  $('modal').classList.remove('hidden'); a.lastChild.focus();
+}
+
+/* ============ Calificación ============ */
+function grade(){
+  const res=state.order.map((id,i)=>{ const p=P[id]; const ans=state.place[id]; const hit=(ans==='good')===p.ok; return {id,num:i+1,ans,hit}; });
+  const hits=res.filter(r=>r.hit).length;
+  return {res, hits, total:res.length, score:Math.round(hits/res.length*100),
+    goodHit:res.filter(r=>P[r.id].ok&&r.hit).length, badHit:res.filter(r=>!P[r.id].ok&&r.hit).length};
+}
+let G=null, filterMode='errores';
+function showResults(g){
+  G=g;
+  ['scrStart','scrWork'].forEach(id=>$(id).classList.add('hidden')); $('scrResult').classList.remove('hidden');
+  ['submitBtn','countPill'].forEach(id=>$(id).classList.add('hidden'));
+  $('whoPill').textContent=state.name; $('whoPill').classList.remove('hidden');
+  const first=state.name.split(' ')[0];
+  $('scoreNum').innerHTML=g.score+'<small>/100</small>';
+  $('scoreTitle').textContent = g.score>=90 ? 'Excelente criterio, '+first : g.score>=70 ? 'Buen trabajo, '+first+', revisa tus errores' : 'Repasemos juntos, '+first;
+  $('scoreMsg').textContent='Clasificaste bien '+g.hits+' de '+g.total+' prompts. Revisa cada tarjeta: los malos prompts traen una versión mejorada.';
+  const nGood=PROMPTS.filter(p=>p.ok).length, nBad=PROMPTS.length-nGood;
+  $('stats').innerHTML=[['Aciertos',g.hits+'/'+g.total,'ok'],['Buenos reconocidos',g.goodHit+'/'+nGood,'accent'],['Malos detectados',g.badHit+'/'+nBad,'accent'],['Errores',g.total-g.hits,'bad']]
+    .map(([l,v,c])=>'<div class="stat" style="background:var(--'+(c==='accent'?'accent-soft':c+'-bg')+');color:var(--'+(c==='accent'?'accent':c)+')"><b>'+v+'</b>'+l+'</div>').join('');
+  renderRes();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderRes(){
+  const f=$('filter'); const modes=[['errores','Mis errores'],['todos','Todos'],['malos','Solo malos prompts'],['buenos','Solo buenos prompts']];
+  f.innerHTML=modes.map(([k,l])=>'<button type="button" aria-pressed="'+(filterMode===k)+'" data-f="'+k+'">'+l+'</button>').join('');
+  f.querySelectorAll('button').forEach(b=>b.onclick=()=>{ filterMode=b.dataset.f; renderRes(); });
+  const list=G.res.filter(r=> filterMode==='todos' || (filterMode==='errores'&&!r.hit) || (filterMode==='malos'&&!P[r.id].ok) || (filterMode==='buenos'&&P[r.id].ok));
+  const box=$('resList'); box.innerHTML='';
+  if(!list.length){ box.innerHTML='<div class="res hit"><p class="why" style="margin:0">No tienes errores. Mira la pestaña "Todos" para leer las explicaciones.</p></div>'; return; }
+  list.forEach(r=>{
+    const p=P[r.id];
+    const chips=Object.keys(ELEM).filter(k=>p.el[k]).map(k=>{ const v=p.el[k]; const lab=v==='si'?'Tiene':v==='no'?'Falta':'Problema'; return '<span class="chip '+v+'" title="'+esc(ELEM[k].d)+'">'+lab+': '+ELEM[k].n+'</span>'; }).join('');
+    const d=document.createElement('article'); d.className='res '+(r.hit?'hit':'miss');
+    d.innerHTML='<div class="h"><span class="st">'+(r.hit?'Correcto':'Incorrecto')+'</span><span class="task">'+r.num+' · '+esc(p.tarea)+'</span></div>'
+      +'<div class="ans">Tu respuesta: <b>'+(r.ans==='good'?'Buen prompt':'Mal prompt')+'</b> · Respuesta correcta: <b>'+(p.ok?'Buen prompt':'Mal prompt')+'</b></div>'
+      +'<div class="txt">'+esc(p.t)+'</div>'
+      +'<div class="chips">'+chips+'</div>'
+      +'<p class="why">'+esc(p.e)+'</p>'
+      +(p.m?'<div class="better"><b>Versión mejorada</b><div class="txt">'+esc(p.m)+'</div></div>':'');
+    box.appendChild(d);
+  });
+}
+
+/* ============ Envío ============ */
+async function sendToSheet(g){
+  const st=$('sendStatus');
+  if(!CONFIG.SHEETS_URL){ st.className='send'; st.textContent='Registro de notas no configurado: muestra esta pantalla a tu docente.'; return; }
+  st.className='send'; st.textContent='Enviando tu resultado al docente...';
+  const payload={hoja:CONFIG.HOJA, datos:{
+    'Nombre':state.name, 'Nota (/100)':g.score, 'Intento':state.attempts,
+    'Minutos':Math.round((Date.now()-state.started)/60000),
+    'Aciertos':g.hits, 'Total':g.total, 'Buenos reconocidos':g.goodHit, 'Malos detectados':g.badHit,
+    'Prompts fallados':g.res.filter(r=>!r.hit).map(r=>P[r.id].tarea+': '+P[r.id].t.slice(0,60)+'...').join(' | '),
+    'Navegador':navigator.userAgent.slice(0,120)
+  }};
+  try{
+    await fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    st.className='send ok'; st.textContent='Resultado enviado al docente.';
+  }catch(e){ st.className='send bad'; st.textContent='No se pudo enviar el resultado (revisa tu conexión). Toma una captura de esta pantalla y envíala a tu docente.'; }
+}
+
+/* ============ Flujo ============ */
+function startWork(){
+  $('scrStart').classList.add('hidden'); $('scrWork').classList.remove('hidden');
+  $('whoPill').textContent=state.name; ['whoPill','countPill','submitBtn'].forEach(id=>$(id).classList.remove('hidden'));
+  render();
+}
+$('startBtn').addEventListener('click',()=>{
+  const n=$('nameInput').value.trim().replace(/\s+/g,' ');
+  if(n.split(' ').length<2){ $('nameErr').textContent='Escribe tu nombre y al menos un apellido, para que tu docente pueda identificar tu entrega.'; $('nameInput').focus(); return; }
+  if(state.name!==n){ state.place={}; state.submitted=null; }
+  state.name=n; state.started=state.started||Date.now();
+  if(!state.order.length || state.order.length!==PROMPTS.length) state.order=shuffle(PROMPTS.map(p=>p.id));
+  save(); startWork();
+});
+$('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('startBtn').click(); });
+$('submitBtn').addEventListener('click',()=>{
+  const left=state.order.filter(id=>!state.place[id]||state.place[id]==='pool').length;
+  if(left){ modal('Te faltan '+left+(left===1?' prompt':' prompts'),'Clasifica todas las tarjetas antes de entregar.',[['Volver al tablero',true]]); return; }
+  modal('¿Entregar la actividad?','Después de entregar verás la corrección y ya no podrás mover las tarjetas.',[
+    ['Seguir revisando',false],
+    ['Entregar',true,()=>{ state.attempts=(state.attempts||0)+1; const g=grade(); state.submitted={score:g.score}; save(); showResults(g); sendToSheet(g); }]
+  ]);
+});
+
+/* ============ Inicio ============ */
+$('brandSub').textContent=CONFIG.CURSO+' · '+CONFIG.ACTIVIDAD;
+$('kicker').textContent=CONFIG.ACTIVIDAD;
+$('checksStart').innerHTML=Object.values(ELEM).map(x=>'<div><b>'+x.n+'</b>'+x.d+'</div>').join('');
+load();
+if(state.name) $('nameInput').value=state.name;
+if(state.name && state.submitted && state.order.length){
+  showResults(grade());
+  $('sendStatus').textContent='Esta actividad ya fue entregada desde este navegador.';
+}
+</script>
+</body>
+</html>

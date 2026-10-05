@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anonimización antes de usar IA · Actividad 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens ============ */
+:root{
+  color-scheme: light;
+  --ground:#ECEFF2; --paper:#FFFFFF; --ink:#1B2430; --ink-2:#4A5563; --ink-3:#6B7480;
+  --line:#D5DAE0; --accent:#1F4E79; --accent-ink:#FFFFFF; --accent-soft:#E3ECF5;
+  --ok:#2E7D46; --ok-bg:#DCF1E2; --warn:#9A6B00; --warn-bg:#FFF1C7; --bad:#B42323; --bad-bg:#FDE2E2;
+  --fp:#7A5C00; --fp-bg:#FFF6A8;
+  --c-ID:#2F6FD0; --c-ID-bg:#DCE8FB;
+  --c-CON:#137A6B; --c-CON-bg:#D3EFEA;
+  --c-FIN:#6E44B8; --c-FIN-bg:#E8DEF8;
+  --c-SEN:#B8304F; --c-SEN-bg:#FADCE3;
+  --c-CUASI:#B55F00; --c-CUASI-bg:#FCE5C8;
+  --c-CONF:#47515E; --c-CONF-bg:#E1E5EA;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+.hidden{display:none !important}
+h1,h2,h3{line-height:1.2}
+
+/* ============ Layout ============ */
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:15px;letter-spacing:.01em}
+.brand small{display:block;font-weight:500;color:var(--ink-3);font-size:12px}
+.spacer{flex:1}
+.back{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:18px}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--ink-2);background:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:10px 18px;font-weight:600;min-height:44px}
+.btn:hover{border-color:var(--ink-3)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:#173D60}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
+
+/* ============ Inicio ============ */
+.intro{max-width:760px;margin:24px auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:36px}
+.intro .kicker{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.intro h1{font-family:var(--serif);font-size:34px;margin:8px 0 12px}
+.intro p{color:var(--ink-2);margin:0 0 12px}
+.intro ol{color:var(--ink-2);padding-left:20px;margin:8px 0 20px}
+.intro ol li{margin:6px 0}
+.field{display:flex;flex-direction:column;gap:6px;margin:20px 0 8px}
+.field label{font-weight:600;font-size:14px}
+.field input{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:8px;min-height:44px}
+.field input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.err{color:var(--bad);font-size:14px;min-height:20px}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:12px 0 20px}
+.legend div{border-radius:8px;padding:8px 10px;font-size:13px;color:var(--ink-2)}
+.legend b{display:block;color:var(--ink);font-size:14px}
+
+/* ============ Trabajo ============ */
+.work{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+@media (max-width:980px){.work{grid-template-columns:1fr}.side{position:static !important}}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(20,30,45,.06);padding:64px 72px;font-family:var(--serif);font-size:17px;line-height:1.75;color:#1A1A1A;overflow-wrap:anywhere}
+@media (max-width:700px){.paper{padding:28px 20px;font-size:16px}}
+.paper p{margin:0 0 14px;text-align:justify;hyphens:auto}
+.paper .b-right{text-align:right;font-weight:700;font-size:15px;margin-left:30%;line-height:1.5}
+.paper .b-addr{font-weight:700;margin:24px 0 20px}
+.paper h3{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:.04em;margin:26px 0 10px}
+.paper .b-date{text-align:right;margin-top:24px}
+.paper .sig{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:56px 0 24px;text-align:center}
+.paper .sig div{border-top:1px solid #333;padding-top:6px;font-size:15px;line-height:1.5}
+.paper .b-note{margin-top:28px;background:#FFF9D9;border:1px dashed #C9A500;padding:14px 16px;font-family:var(--sans);font-size:14px;line-height:1.6;text-align:left}
+.paper .page-break{border:0;border-top:1px dashed var(--line);margin:28px -72px;position:relative}
+@media (max-width:700px){.paper .page-break{margin:24px -20px}}
+
+.w{border-radius:2px}
+#doc{user-select:text;-webkit-user-select:text}
+#doc .w{cursor:text}
+.m{cursor:pointer !important;padding:1px 0}
+.m.c-ID{background:var(--c-ID-bg);box-shadow:inset 0 -2px 0 var(--c-ID)}
+.m.c-CON{background:var(--c-CON-bg);box-shadow:inset 0 -2px 0 var(--c-CON)}
+.m.c-FIN{background:var(--c-FIN-bg);box-shadow:inset 0 -2px 0 var(--c-FIN)}
+.m.c-SEN{background:var(--c-SEN-bg);box-shadow:inset 0 -2px 0 var(--c-SEN)}
+.m.c-CUASI{background:var(--c-CUASI-bg);box-shadow:inset 0 -2px 0 var(--c-CUASI)}
+.m.c-CONF{background:var(--c-CONF-bg);box-shadow:inset 0 -2px 0 var(--c-CONF)}
+
+.side{position:sticky;top:76px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.card h4{margin:0 0 10px;font-size:14px;letter-spacing:.02em}
+.card p{margin:0 0 8px;font-size:14px;color:var(--ink-2)}
+.cat-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-2);margin:8px 0}
+.sw{flex:none;width:14px;height:14px;border-radius:3px;margin-top:3px}
+.cat-row b{color:var(--ink)}
+.marks-list{max-height:280px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.mk{display:flex;gap:8px;align-items:center;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--paper);text-align:left;width:100%;min-height:36px}
+.mk span.t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk .tag{font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px}
+.empty{font-size:13px;color:var(--ink-3)}
+
+/* menú flotante */
+.menu{position:fixed;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(15,25,40,.18);padding:10px;width:300px;max-width:calc(100vw - 16px)}
+.menu .mt{font-size:12px;color:var(--ink-3);margin:2px 4px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.menu button.cat{border:1px solid transparent;border-radius:8px;padding:8px;font-size:13px;font-weight:600;text-align:left;min-height:44px;line-height:1.25}
+.menu button.cat small{display:block;font-weight:400;font-size:11px;opacity:.85}
+.menu .row{display:flex;gap:6px;margin-top:8px}
+.menu .row button{flex:1;min-height:40px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:13px;font-weight:600}
+.menu .row button.del{color:var(--bad)}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,22,32,.45);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--paper);border-radius:14px;max-width:440px;width:100%;padding:24px}
+.modal h3{margin:0 0 8px}
+.modal p{color:var(--ink-2);margin:0 0 18px}
+.modal .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ============ Resultados ============ */
+.score-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px 28px;margin-bottom:20px}
+@media (max-width:700px){.score-head{grid-template-columns:1fr}}
+.score{font-family:var(--serif);font-size:72px;font-weight:700;line-height:1;color:var(--accent)}
+.score small{font-size:24px;color:var(--ink-3)}
+.score-head h2{margin:0 0 4px;font-size:22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600}
+.stat b{font-size:18px;display:block}
+.send{font-size:13px;color:var(--ink-3);margin-top:10px}
+.send.ok{color:var(--ok)} .send.bad{color:var(--bad)}
+
+.tabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 16px;font-weight:600;font-size:14px;min-height:40px}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.review-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+@media (max-width:1100px){.review-grid{grid-template-columns:1fr}}
+.keyleg{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--ink-2);margin-bottom:12px}
+.keyleg span{display:inline-flex;align-items:center;gap:6px}
+
+.r-full{background:var(--ok-bg);box-shadow:inset 0 -2px 0 var(--ok)}
+.r-partial{background:var(--warn-bg);box-shadow:inset 0 -2px 0 var(--warn)}
+.r-missed{background:var(--bad-bg);box-shadow:inset 0 -2px 0 var(--bad)}
+.r-fp{background:var(--fp-bg);text-decoration:underline wavy var(--fp);text-underline-offset:3px}
+.r-unmarked{background:transparent;box-shadow:inset 0 -2px 0 var(--warn)}
+.badge{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:700;line-height:1;padding:3px 5px;border-radius:4px;margin-right:3px;vertical-align:2px;color:#fff;cursor:pointer;border:0}
+.badge.full{background:var(--ok)} .badge.partial{background:var(--warn)} .badge.missed{background:var(--bad)} .badge.fp{background:var(--fp)}
+.chip{font-family:var(--sans);font-size:13px;font-weight:700;background:var(--ink);color:#fff;border-radius:4px;padding:1px 6px;white-space:nowrap}
+
+.expl{display:flex;flex-direction:column;gap:10px}
+.ex{background:var(--paper);border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:12px 14px;font-size:14px}
+.ex.full{border-left-color:var(--ok)} .ex.partial{border-left-color:var(--warn)} .ex.missed{border-left-color:var(--bad)} .ex.fp{border-left-color:var(--fp)} .ex.neutral{border-left-color:var(--ink-3)}
+.ex.flash{outline:3px solid var(--accent);outline-offset:2px}
+.ex .h{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.ex .st{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:4px;padding:2px 6px}
+.ex .st.full{background:var(--ok-bg);color:var(--ok)} .ex .st.partial{background:var(--warn-bg);color:var(--warn)} .ex .st.missed{background:var(--bad-bg);color:var(--bad)} .ex .st.fp{background:var(--fp-bg);color:var(--fp)} .ex .st.neutral{background:var(--accent-soft);color:var(--ink-2)}
+.ex .q{font-family:var(--serif);font-size:15px;background:var(--ground);border-radius:6px;padding:6px 8px;margin:6px 0;word-break:break-all}
+.ex .meta{font-size:13px;color:var(--ink-2);margin:4px 0}
+.ex .why{margin:6px 0 0;color:var(--ink)}
+.filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filter button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 10px;font-size:13px;min-height:36px}
+.filter button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+.foot{color:var(--ink-3);font-size:12px;text-align:center;margin-top:32px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="back" href="../" aria-label="Volver a la portada del curso">&larr;</a>
+    <div class="brand" id="brand">Anonimización antes de usar IA<small id="brandSub"></small></div>
+    <div class="spacer"></div>
+    <span class="pill hidden" id="whoPill"></span>
+    <span class="pill hidden" id="countPill">0 marcas</span>
+    <button class="btn btn-primary hidden" id="submitBtn" type="button">Entregar</button>
+  </div>
+</header>
+
+<main>
+  <!-- ========== PANTALLA 1: INICIO ========== -->
+  <section id="scrStart" class="intro">
+    <div class="kicker" id="kicker"></div>
+    <h1>¿Qué datos borrarías antes de subir este escrito a una IA?</h1>
+    <p>Vas a trabajar sobre un memorial de demanda <b>ficticio</b>. Antes de pegar un documento de un cliente en una herramienta de IA, el abogado debe quitar o reemplazar todo lo que permita identificar a personas o que esté protegido por el secreto profesional.</p>
+    <ol>
+      <li>Lee el documento completo.</li>
+      <li>Selecciona con el mouse (o el dedo) el texto que anonimizarías.</li>
+      <li>En el menú que aparece, elige la categoría del dato.</li>
+      <li>Para corregir una marca, haz clic sobre ella.</li>
+      <li>Al terminar, presiona <b>Entregar</b>: verás tu nota, lo que se te pasó y por qué.</li>
+    </ol>
+    <p><b>Ojo:</b> marcar de más también resta. No todo lo que aparece en un escrito es un dato sensible.</p>
+    <div class="legend" id="legendStart"></div>
+    <div class="field">
+      <label for="nameInput">Nombre completo</label>
+      <input id="nameInput" autocomplete="name" placeholder="Ej.: Ana Pérez Gutiérrez">
+    </div>
+    <div class="err" id="nameErr" role="alert"></div>
+    <button class="btn btn-primary" id="startBtn" type="button">Comenzar actividad</button>
+  </section>
+
+  <!-- ========== PANTALLA 2: TRABAJO ========== -->
+  <section id="scrWork" class="work hidden">
+    <article class="paper" id="doc" aria-label="Documento a anonimizar"></article>
+    <aside class="side">
+      <div class="card">
+        <h4>Categorías</h4>
+        <div id="legendSide"></div>
+      </div>
+      <div class="card">
+        <h4>Tus marcas</h4>
+        <div class="marks-list" id="marksList"><div class="empty">Todavía no marcaste nada. Selecciona texto en el documento.</div></div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ========== PANTALLA 3: RESULTADOS ========== -->
+  <section id="scrResult" class="hidden">
+    <div class="score-head">
+      <div class="score" id="scoreNum">0<small>/100</small></div>
+      <div>
+        <h2 id="scoreTitle"></h2>
+        <div id="scoreMsg" style="color:var(--ink-2)"></div>
+        <div class="stats" id="stats"></div>
+        <div class="send" id="sendStatus"></div>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="review" type="button">Tu documento corregido</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="anon" type="button">Versión anonimizada modelo</button>
+    </div>
+
+    <div class="review-grid">
+      <div>
+        <div class="keyleg" id="keyleg">
+          <span><i class="sw" style="background:var(--ok-bg);box-shadow:inset 0 -2px 0 var(--ok)"></i>Bien anonimizado</span>
+          <span><i class="sw" style="background:var(--warn-bg);box-shadow:inset 0 -2px 0 var(--warn)"></i>Incompleto</span>
+          <span><i class="sw" style="background:var(--bad-bg);box-shadow:inset 0 -2px 0 var(--bad)"></i>No lo marcaste</span>
+          <span><i class="sw" style="background:var(--fp-bg)"></i>Marcado sin necesidad</span>
+        </div>
+        <article class="paper" id="docReview"></article>
+        <article class="paper hidden" id="docAnon"></article>
+      </div>
+      <aside>
+        <div class="filter" id="filter"></div>
+        <div class="expl" id="expl"></div>
+      </aside>
+    </div>
+  </section>
+  <div class="foot">Documento ficticio con fines educativos. Cualquier parecido con personas, empresas o casos reales es coincidencia.</div>
+</main>
+
+<div class="menu hidden" id="menu" role="dialog" aria-label="Clasificar selección"></div>
+<script src="../config.js"></script>
+<div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN DEL DOCENTE
+   Pega aquí la URL de tu Apps Script (ver README.md). Si la dejas vacía,
+   la actividad funciona igual, pero las notas no se registran.
+   ===================================================================== */
+const CC = window.CURSO_CONFIG || {};
+const CONFIG = {
+  SHEETS_URL: CC.SHEETS_URL || '',
+  CURSO: CC.CURSO || 'IA para abogados',
+  ACTIVIDAD: 'Módulo 1 · Actividad 1: Anonimización',
+  HOJA: 'Actividad 1 · Anonimización',
+};
+
+/* ============ Categorías ============ */
+const CATS = {
+  ID:    {n:'Identificador directo', d:'Nombres, CI, NIT, matrícula, firma'},
+  CON:   {n:'Dato de contacto',      d:'Domicilio, correo, teléfono'},
+  FIN:   {n:'Financiero / cripto',   d:'Cuentas, wallets, hashes'},
+  SEN:   {n:'Dato sensible',         d:'Salud, menores de edad, vida íntima'},
+  CUASI: {n:'Cuasi-identificador',   d:'Identifica sin decir el nombre'},
+  CONF:  {n:'Confidencial',          d:'Secreto profesional, estrategia'},
+};
+const CAT_KEYS = Object.keys(CATS);
+
+/* =====================================================================
+   DOCUMENTO
+   {{k_...|texto}} = dato que DEBE anonimizarse (clave)
+   {{t_...|texto}} = trampa: NO debe anonimizarse (resta si se marca)
+   {{n_...|texto}} = neutral: opcional, no suma ni resta
+   ===================================================================== */
+const DOC = [
+  {t:'right', s:'DEMANDA ORDINARIA DE CUMPLIMIENTO DE CONTRATO, PAGO DE SUMAS ADEUDADAS Y RESARCIMIENTO DE DAÑOS Y PERJUICIOS.— OTROSÍES.—'},
+  {t:'addr', s:'SEÑOR {{t_juez|JUEZ PÚBLICO CIVIL Y COMERCIAL}} DE TURNO DE LA CIUDAD DE {{t_lp1|LA PAZ}}'},
+  {t:'p', s:'{{k_nom1|MARÍA FERNANDA QUISPE ROJAS}}, mayor de edad, hábil por derecho, con cédula de identidad {{k_ci1|N° 4.876.213 L.P.}}, nacida el {{k_fnac|14 de marzo de 1986}}, de estado civil casada, comerciante, con domicilio real en {{k_dir1|calle Los Pinos N° 1547, zona Achumani, edificio Torre Illimani, departamento 6-B}}, propietaria de la empresa unipersonal {{k_emp1|«Tejidos Andinos Quispe»}} con {{k_nit1|NIT 4876213018}}, correo electrónico {{k_mail1|mfquispe.tejidos@correo-ficticio.bo}} y teléfono celular {{k_tel1|+591 71234567}}, con el patrocinio del abogado {{k_abo|Jorge Luis Mamani Céspedes}}, con {{k_mat|matrícula profesional N° 7845-JLM}}, ante su autoridad, con el debido respeto, me presento y digo:'},
+  {t:'h', s:'I. DE LA PARTE DEMANDADA'},
+  {t:'p', s:'Interpongo la presente demanda contra la sociedad {{k_emp2|INVERSIONES ALTIPLANO S.R.L.}}, con {{k_nit2|NIT 1029384756}}, legalmente representada por su Gerente General, {{k_nom2|Rodrigo Andrés Villarroel Paz}}, con cédula de identidad {{k_ci2|N° 3.398.551 Cbba.}}, con domicilio en {{k_dir2|avenida Arce N° 2780, edificio Multicentro, piso 9, oficina 902, zona San Jorge}}, de la ciudad de {{t_lp2|La Paz}}, quien además puede ser notificado en el correo electrónico {{k_mail2|rvillarroel@altiplano-inversiones.bo}} y en el número {{k_tel2|+591 76598432}}.'},
+  {t:'h', s:'II. ANTECEDENTES Y FUNDAMENTOS DE HECHO'},
+  {t:'p', s:'1. En fecha {{n_f1|2 de febrero de 2026}}, la suscrita y la empresa demandada celebraron un {{t_contrato|contrato privado de compraventa e importación de maquinaria}}, por el cual la demandada se obligó a importar y entregar cuatro máquinas tejedoras industriales en un plazo máximo de noventa días calendario, a cambio del precio total de {{n_m1|USD 50.000.- (Cincuenta mil 00/100 dólares estadounidenses)}}.'},
+  {t:'p', s:'2. A solicitud expresa del representante legal de la demandada, el anticipo de {{n_m2|USD 25.000.-}} fue pagado en la criptomoneda estable {{t_usdt|USDT}}, desde la billetera digital de la suscrita {{k_wal1|0x7aF3c91B2e4D8a0F56cE19b7D3a2E8f4C6b1D9e0}} hacia la billetera designada por el señor {{k_nom2b|Villarroel}}, {{k_wal2|TQx8mR3vN6kP2wL9sD4fH7jY1cB5gZ0aE3}}, en la red {{t_tron|Tron}}. La operación quedó registrada en la cadena de bloques con el hash {{k_hash|9c4e1f7a2b8d3e6f0a5c9b1d7e3f8a2c4b6d0e9f1a3c5b7d9e2f4a6c8b0d1e3f}}, conforme se acredita con el comprobante adjunto.'},
+  {t:'p', s:'3. El saldo de {{n_m3|USD 25.000.-}} fue pagado el {{n_f2|10 de marzo de 2026}} mediante transferencia bancaria desde la {{k_cta|cuenta de ahorro N° 1000-458721-3 del Banco Cordillera S.A.}}, de titularidad de la suscrita. Pese a haber cumplido íntegramente con su obligación de pago, la demandada no entregó maquinaria alguna.'},
+  {t:'p', s:'4. El {{n_f3|15 de mayo de 2026}}, el señor {{k_nom2c|Villarroel}} remitió desde su correo {{k_mail2b|rvillarroel@altiplano-inversiones.bo}} un mensaje en el que reconoció la deuda y prometió que la entrega se realizaría en el camión con placa {{k_placa|4521-KTR}}, lo que nunca ocurrió. Según el informe técnico del proveedor de la plataforma de pedidos, las confirmaciones falsas de despacho fueron registradas desde la dirección IP {{k_ip|203.0.113.57}}, asignada a la oficina de la demandada.'},
+  {t:'pb'},
+  {t:'p', s:'5. Cabe señalar que el representante legal de la demandada es, a la vez, {{k_cuasi1|el único notario de fe pública del municipio de Sorata}}, circunstancia que la suscrita conoció recién después de firmar el contrato.'},
+  {t:'p', s:'6. La suscrita no pudo iniciar acciones antes debido a que permaneció internada en la {{k_clin|Clínica Santa Lucía de la zona Sopocachi}} entre abril y junio de 2026, a causa de {{k_salud|una mastectomía y el tratamiento oncológico posterior}}, conforme acredita el certificado médico adjunto.'},
+  {t:'p', s:'7. El incumplimiento de la demandada causó graves perjuicios a la economía familiar. La suscrita, su esposo {{k_esposo|Daniel Choque Limachi}} y su hijo {{k_menor|Mateo Alejandro Choque Quispe, de 9 años de edad}}, alumno de {{k_colegio|cuarto de primaria, paralelo B, de la Unidad Educativa Nueva Esperanza}}, tuvieron que reducir gastos esenciales; incluso se acumularon tres meses de mora en la pensión escolar del menor.'},
+  {t:'p', s:'8. Además, la falta de maquinaria impidió cumplir pedidos de exportación ya comprometidos, lo que afectó la reputación de un emprendimiento que fue {{k_cuasi2|reconocido con el premio «Mujer Emprendedora de El Alto 2024» en la categoría textil}}.'},
+  {t:'p', s:'9. La suscrita presentó una consulta ante la {{t_asfi|Autoridad de Supervisión del Sistema Financiero (ASFI)}} para verificar si la demandada contaba con autorización para operar con activos virtuales, sin que a la fecha se tenga respuesta. Posteriormente se acudió a conciliación previa, que concluyó sin acuerdo según {{k_acta|Acta de Conciliación N° CC-LP-2026-0388}}.'},
+  {t:'h', s:'III. FUNDAMENTOS DE DERECHO'},
+  {t:'p', s:'La presente demanda se funda en los {{t_cc|artículos 519 y 568 del Código Civil}}, que reconocen la fuerza de ley del contrato entre las partes y la facultad de la parte que cumplió de pedir judicialmente el cumplimiento o la resolución del contrato, más el resarcimiento del daño; así como en el {{t_cpc|artículo 110 de la Ley N° 439, Código Procesal Civil}}, que regula el contenido de la demanda.'},
+  {t:'h', s:'IV. PETITORIO'},
+  {t:'p', s:'Por lo expuesto, pido a su autoridad admitir la presente demanda y, previos los trámites de ley, dictar sentencia declarándola probada y disponiendo: a) el cumplimiento del contrato y la entrega de la maquinaria en el plazo de diez días; o, en su defecto, b) la devolución de {{n_m4|USD 50.000.-}} más los intereses legales; y c) el pago de daños y perjuicios a calcularse en ejecución de sentencia, con costas.'},
+  {t:'h', s:'OTROSÍES'},
+  {t:'p', s:'Otrosí 1.- Adjunto prueba documental: contrato privado, comprobantes de transferencia, capturas de los mensajes de WhatsApp enviados desde el número {{k_tel2b|+591 76598432}}, certificado médico y acta de conciliación.'},
+  {t:'p', s:'Otrosí 2.- Ofrezco la declaración testifical de {{k_test|Ana Gabriela Torrez Vino}}, con cédula de identidad {{k_ci3|N° 6.112.908 L.P.}}, empleada de la empresa de la suscrita, quien presenció la entrega del anticipo.'},
+  {t:'p', s:'Otrosí 3.- Señalo como domicilio procesal la secretaría de su despacho y la casilla electrónica {{k_mail3|jmamani.abogado@correo-ficticio.bo}}.'},
+  {t:'date', s:'{{t_lp3|La Paz}}, {{n_f4|28 de septiembre de 2026}}'},
+  {t:'sig', cols:['{{k_firma1|María Fernanda Quispe Rojas}}\nDEMANDANTE', '{{k_firma2|Abg. Jorge Luis Mamani Céspedes}}\n{{k_mat2|Mat. Prof. 7845-JLM}}']},
+  {t:'note', s:'{{n_nota|NOTA INTERNA DEL ESTUDIO — BORRAR ANTES DE PRESENTAR:}} {{k_conf1|La clienta acepta conciliar hasta por el 60 % del monto reclamado si la demandada paga antes de diciembre.}} {{k_conf2|El contrato privado nunca fue reconocido ante notario y la cláusula de entrega tiene una fecha corregida a mano; preparar la estrategia probatoria antes de la audiencia preliminar.}}'},
+];
+
+/* =====================================================================
+   CLAVE DE RESPUESTAS Y EXPLICACIONES
+   w = peso (2 básico, 3 intermedio, 5 complejo)
+   cats = categorías aceptadas (la primera es la principal)
+   r = reemplazo sugerido en la versión anonimizada
+   ===================================================================== */
+const SECRETO = 'Lo protege el secreto profesional: el abogado no puede revelar información del caso de su cliente a terceros, y subirla a una IA sin anonimizar es entregarla a un tercero.';
+const ITEMS = {
+  k_nom1:{w:2,cats:['ID'],r:'[DEMANDANTE]',e:'Nombre completo de la clienta: es el identificador directo por excelencia. Reemplázalo por un rol ([DEMANDANTE]) para que la IA pueda seguir entendiendo el caso.'},
+  k_ci1:{w:2,cats:['ID'],r:'[CI_DEMANDANTE]',e:'La cédula de identidad identifica de forma única a una persona y se usa para suplantación y fraude. Nunca debe salir del estudio.'},
+  k_fnac:{w:3,cats:['ID','CUASI'],r:'[FECHA_NAC]',e:'La fecha de nacimiento, sumada a la ciudad o al estado civil, basta para identificar a una persona. Si la edad importa para el caso, escribe solo "mayor de edad" o un rango.'},
+  k_dir1:{w:2,cats:['CON'],r:'[DOMICILIO_1]',e:'El domicilio real ubica físicamente a la clienta. Anonimiza la dirección completa: si dejas el edificio o el número de departamento, el dato sigue siendo identificable.'},
+  k_emp1:{w:3,cats:['ID','CUASI'],r:'[EMPRESA_DEMANDANTE]',e:'El nombre de la empresa unipersonal contiene el apellido de la clienta y figura en registros públicos: lleva directo a ella.'},
+  k_nit1:{w:2,cats:['ID'],r:'[NIT_1]',e:'Es el NIT de una persona natural (fíjate que incluye el número de su CI). Es un identificador tributario único.'},
+  k_mail1:{w:2,cats:['CON'],r:'[CORREO_1]',e:'El correo es un dato de contacto directo y suele contener el nombre de la persona.'},
+  k_tel1:{w:2,cats:['CON'],r:'[TELÉFONO_1]',e:'Un número de celular identifica y permite contactar a la persona; también se usa para buscarla en WhatsApp y redes sociales.'},
+  k_abo:{w:2,cats:['ID'],r:'[ABOGADO]',e:'El abogado también es una persona con derecho a su privacidad. Además, su nombre vincula el caso con tu estudio.'},
+  k_mat:{w:2,cats:['ID'],r:'[MATRÍCULA]',e:'La matrícula profesional identifica de forma única al abogado en el registro del Ministerio de Justicia.'},
+  k_emp2:{w:3,cats:['ID','CONF'],r:'[EMPRESA_DEMANDADA]',e:'Una sociedad no tiene "datos personales" en sentido estricto, pero identificar a la contraparte de un caso que todavía no es público expone a tu cliente y a la empresa. '+SECRETO},
+  k_nit2:{w:2,cats:['ID','CONF'],r:'[NIT_2]',e:'El NIT de la empresa demandada la identifica sin lugar a dudas en el padrón tributario. Si anonimizas el nombre y dejas el NIT, no anonimizaste nada.'},
+  k_nom2:{w:2,cats:['ID'],r:'[REPRESENTANTE_LEGAL]',e:'Nombre completo del representante legal de la contraparte: identificador directo de una persona natural.'},
+  k_ci2:{w:2,cats:['ID'],r:'[CI_REPRESENTANTE]',e:'Cédula de identidad de un tercero. Los datos de la contraparte merecen la misma protección que los de tu cliente.'},
+  k_dir2:{w:2,cats:['CON'],r:'[DOMICILIO_2]',e:'Domicilio de la demandada con edificio, piso y oficina: ubica físicamente a personas concretas.'},
+  k_mail2:{w:2,cats:['CON'],r:'[CORREO_2]',e:'Correo personal del representante legal; contiene su apellido.'},
+  k_tel2:{w:2,cats:['CON'],r:'[TELÉFONO_2]',e:'Número de celular del representante legal de la contraparte.'},
+  k_wal1:{w:3,cats:['FIN'],r:'[WALLET_1]',e:'Una dirección de billetera es pública en la blockchain: con ella cualquiera puede ver todo el historial y el saldo de la clienta. Es un dato financiero que, unido al nombre, revela su patrimonio.'},
+  k_nom2b:{w:3,cats:['ID'],r:'[REPRESENTANTE_LEGAL]',e:'Aunque aparece solo el apellido, se refiere a la misma persona ya identificada. Si anonimizas el nombre completo arriba y aquí dejas "Villarroel", el dato se filtra igual. La anonimización tiene que ser consistente en todo el documento.'},
+  k_wal2:{w:3,cats:['FIN'],r:'[WALLET_2]',e:'Billetera de la contraparte en la red Tron. Permite rastrear todos sus movimientos y vincularla con exchanges donde se verificó su identidad.'},
+  k_hash:{w:3,cats:['FIN'],r:'[HASH_TX]',e:'El hash de la transacción es único: al buscarlo en un explorador de bloques aparecen las dos billeteras, el monto y la fecha. Es tan revelador como un extracto bancario.'},
+  k_cta:{w:3,cats:['FIN'],r:'[CUENTA_BANCARIA]',e:'Número de cuenta bancaria junto con el banco: dato financiero que puede usarse para fraude y que revela con qué entidad opera la clienta.'},
+  k_nom2c:{w:3,cats:['ID'],r:'[REPRESENTANTE_LEGAL]',e:'Otra vez el apellido del representante. Revisa todo el documento: los nombres se repiten en distintas formas (completo, solo apellido, "el señor...").'},
+  k_mail2b:{w:2,cats:['CON'],r:'[CORREO_2]',e:'El mismo correo aparece por segunda vez. Si lo anonimizas una vez y no la otra, el dato se filtra igual. Usa siempre el mismo reemplazo ([CORREO_2]) para que la IA entienda que es el mismo dato.'},
+  k_placa:{w:3,cats:['CUASI','ID'],r:'[PLACA]',e:'Una placa vehicular se puede consultar en registros y lleva al propietario del vehículo. Es un identificador indirecto.'},
+  k_ip:{w:3,cats:['CUASI','ID'],r:'[DIRECCIÓN_IP]',e:'La dirección IP se considera dato personal: permite ubicar el lugar de conexión y, con orden judicial, al titular del servicio de internet.'},
+  k_cuasi1:{w:5,cats:['CUASI'],r:'[OTRA ACTIVIDAD PROFESIONAL]',e:'No tiene nombres, pero en Sorata hay un solo notario de fe pública: cualquiera puede averiguar quién es. Esto es un cuasi-identificador, y es el error más común porque no "parece" un dato personal. Si el dato es relevante para el caso, generalízalo ("ejerce otra función pública").'},
+  k_clin:{w:5,cats:['SEN','CUASI'],r:'[CENTRO DE SALUD]',e:'El nombre de la clínica, junto con las fechas de internación, revela dónde se atendió la clienta y facilita identificarla. Va unido a su información de salud.'},
+  k_salud:{w:5,cats:['SEN'],r:'[MOTIVO MÉDICO]',e:'La información de salud es de las más sensibles: su exposición puede causar discriminación y está protegida por el derecho a la intimidad (art. 21 de la Constitución). Si el caso solo necesita justificar la demora, basta con decir "por motivos de salud debidamente acreditados".'},
+  k_esposo:{w:3,cats:['ID'],r:'[CÓNYUGE]',e:'Nombre del esposo: es un tercero que ni siquiera es parte del proceso. Su nombre no aporta nada al análisis y debe salir.'},
+  k_menor:{w:5,cats:['SEN','ID'],r:'[HIJO MENOR]',e:'Los datos de niños, niñas y adolescentes tienen protección reforzada (Ley 548, Código Niña, Niño y Adolescente). Nombre y edad de un menor nunca deben subirse a una IA.'},
+  k_colegio:{w:5,cats:['SEN','CUASI'],r:'[DATOS ESCOLARES]',e:'Colegio, curso y paralelo permiten ubicar físicamente a un menor de edad. Aunque borres su nombre, con estos datos se lo encuentra.'},
+  k_cuasi2:{w:5,cats:['CUASI'],r:'[RECONOCIMIENTO PÚBLICO]',e:'Un premio público con año y categoría es un cuasi-identificador: basta buscarlo en internet para encontrar el nombre de la ganadora y su foto.'},
+  k_acta:{w:3,cats:['CUASI','CONF','ID'],r:'[N° ACTA]',e:'El número de acta de conciliación permite ubicar el expediente y, con él, a las partes. Los números de expediente, actas y casos son identificadores indirectos.'},
+  k_tel2b:{w:2,cats:['CON'],r:'[TELÉFONO_2]',e:'El mismo teléfono reaparece en los otrosíes. Revisa todo el documento, no solo el encabezado.'},
+  k_test:{w:2,cats:['ID'],r:'[TESTIGO]',e:'Nombre del testigo: es un tercero cuya identidad debe protegerse; además, revelarlo antes de la audiencia puede exponerlo a presiones.'},
+  k_ci3:{w:2,cats:['ID'],r:'[CI_TESTIGO]',e:'Cédula de identidad del testigo.'},
+  k_mail3:{w:2,cats:['CON'],r:'[CORREO_ABOGADO]',e:'La casilla electrónica del abogado: dato de contacto que identifica al profesional y al estudio.'},
+  k_firma1:{w:2,cats:['ID'],r:'[FIRMA DEMANDANTE]',e:'El nombre en el bloque de firma se olvida con frecuencia. Si anonimizas el encabezado y dejas la firma, no sirvió de nada.'},
+  k_firma2:{w:2,cats:['ID'],r:'[FIRMA ABOGADO]',e:'Nombre del abogado en la firma.'},
+  k_mat2:{w:2,cats:['ID'],r:'[MATRÍCULA]',e:'La matrícula vuelve a aparecer junto a la firma.'},
+  k_conf1:{w:5,cats:['CONF'],r:'[NOTA INTERNA ELIMINADA]',e:'Es la posición de negociación de la clienta: si se filtra, la contraparte sabe cuánto está dispuesta a ceder. No es un dato personal, pero sí confidencial. '+SECRETO},
+  k_conf2:{w:5,cats:['CONF'],r:'[NOTA INTERNA ELIMINADA]',e:'Revela una debilidad probatoria del caso y la estrategia del estudio. Las notas internas en borradores son una fuente clásica de filtraciones: elimínalas antes de compartir cualquier documento, con una IA o con quien sea.'},
+};
+const TRAPS = {
+  t_juez:'El cargo de la autoridad a la que se dirige el escrito es genérico: no identifica a ningún juez en particular.',
+  t_lp1:'La ciudad, sola, no identifica a nadie, y la IA la necesita para aplicar el contexto correcto (normativa y juzgados de Bolivia).',
+  t_lp2:'La ciudad, sola, no identifica a nadie. Lo que había que anonimizar era la dirección exacta.',
+  t_lp3:'El lugar de presentación del escrito no es un dato personal.',
+  t_contrato:'El tipo de contrato es el centro del análisis jurídico. Si lo borras, la IA no puede ayudarte.',
+  t_usdt:'USDT es el nombre de una criptomoneda, no un dato de la clienta. Saber que se pagó en USDT es relevante para el caso.',
+  t_tron:'Tron es el nombre de una red blockchain pública, como decir "por transferencia bancaria". No identifica a nadie.',
+  t_asfi:'ASFI es una entidad pública. Su nombre es contexto regulatorio necesario para el análisis.',
+  t_cc:'Las normas citadas son información pública y son justamente lo que quieres que la IA analice.',
+  t_cpc:'La cita de la ley procesal es pública y necesaria para el análisis.',
+};
+const NEUTRALS = {
+  n_f1:'Las fechas de los hechos, por sí solas, no identifican a nadie. Anonimizarlas es opcional; si el caso es muy conocido, puedes cambiarlas por referencias relativas ("día 1", "día 37").',
+  n_f2:'Fecha de un hecho: anonimizarla es opcional.',
+  n_f3:'Fecha de un hecho: anonimizarla es opcional.',
+  n_f4:'Fecha del escrito: anonimizarla es opcional.',
+  n_m1:'Los montos no identifican a una persona, pero en casos mediáticos pueden delatar el caso. Anonimizarlos es opcional.',
+  n_m2:'Monto: anonimizarlo es opcional.',
+  n_m3:'Monto: anonimizarlo es opcional.',
+  n_m4:'Monto: anonimizarlo es opcional.',
+  n_nota:'El encabezado de la nota no es sensible, pero marcar la nota entera es una buena decisión: lo correcto es eliminarla.',
+};
+
+/* ============ Estado ============ */
+const STORE_KEY = 'anon-act1-v1';
+let state = {name:'', started:0, marks:[], seq:1, submitted:null, attempts:0};
+let WORDS = []; // {el, item}
+let wordMark = []; // índice de palabra -> id de marca
+
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+function load(){ try{ const s = JSON.parse(localStorage.getItem(STORE_KEY)||'null'); if(s && typeof s==='object') state = Object.assign(state, s); }catch(e){} }
+
+/* ============ Utilidades ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function parseSegs(str){
+  const out=[]; const re=/\{\{([a-z0-9_]+)\|([^}]*)\}\}/g; let last=0, m;
+  while((m=re.exec(str))){ if(m.index>last) out.push({text:str.slice(last,m.index)}); out.push({id:m[1], text:m[2]}); last=re.lastIndex; }
+  if(last<str.length) out.push({text:str.slice(last)});
+  return out;
+}
+function itemText(id){
+  for(const b of DOC){ const strs = b.cols || (b.s ? [b.s] : []); for(const s of strs){ for(const seg of parseSegs(s)) if(seg.id===id) return seg.text; } }
+  return '';
+}
+
+/* ============ Construcción del documento ============ */
+function buildDoc(root, mode){
+  root.innerHTML=''; const words=[];
+  const firstSeen = {};
+  function addText(parent, line){
+    for(const seg of parseSegs(line)){
+      const isKey = seg.id && seg.id[0]==='k';
+      if(mode==='anon' && isKey){
+        const c=document.createElement('span'); c.className='chip'; c.textContent=ITEMS[seg.id].r; parent.appendChild(c); continue;
+      }
+      const pieces = seg.text.split(/(\s+)/);
+      let first = true;
+      for(const piece of pieces){
+        if(!piece) continue;
+        if(/^\s+$/.test(piece)){ parent.appendChild(document.createTextNode(' ')); continue; }
+        if(mode==='review' && first && seg.id && !firstSeen[seg.id]){
+          firstSeen[seg.id]=true;
+          if(isKey){ const b=document.createElement('button'); b.type='button'; b.className='badge'; b.dataset.item=seg.id; parent.appendChild(b); }
+        }
+        first=false;
+        const sp=document.createElement('span'); sp.className='w'; sp.textContent=piece;
+        if(mode!=='anon'){ sp.dataset.i = words.length; words.push({el:sp, item:seg.id||null}); }
+        parent.appendChild(sp);
+      }
+    }
+  }
+  function addLines(parent, s){ s.split('\n').forEach((line,i)=>{ if(i) parent.appendChild(document.createElement('br')); addText(parent,line); }); }
+  for(const b of DOC){
+    let el;
+    if(b.t==='pb'){ el=document.createElement('hr'); el.className='page-break'; el.setAttribute('aria-hidden','true'); root.appendChild(el); continue; }
+    if(b.t==='sig'){ el=document.createElement('div'); el.className='sig'; b.cols.forEach(c=>{ const d=document.createElement('div'); addLines(d,c); el.appendChild(d); }); }
+    else { el=document.createElement(b.t==='h'?'h3':'p'); el.className='b-'+b.t; addLines(el,b.s); }
+    root.appendChild(el);
+  }
+  return words;
+}
+
+/* ============ Marcas ============ */
+function rebuildWordMark(){
+  wordMark = new Array(WORDS.length).fill(null);
+  for(const m of state.marks){ for(let i=m.from;i<=m.to;i++) wordMark[i]=m.id; }
+}
+function paintMarks(){
+  rebuildWordMark();
+  const byId = Object.fromEntries(state.marks.map(m=>[m.id,m]));
+  WORDS.forEach((w,i)=>{
+    const mid = wordMark[i];
+    w.el.className = 'w';
+    if(mid){ const m=byId[mid]; w.el.classList.add('m','c-'+m.cat); w.el.dataset.mark=mid; w.el.title=CATS[m.cat].n+' (clic para cambiar o quitar)'; }
+    else { delete w.el.dataset.mark; w.el.removeAttribute('title'); }
+  });
+  renderMarkList();
+  $('countPill').textContent = state.marks.length + (state.marks.length===1?' marca':' marcas');
+  save();
+}
+function markText(m){ const t=[]; for(let i=m.from;i<=m.to;i++) t.push(WORDS[i].el.textContent); return t.join(' '); }
+function renderMarkList(){
+  const box=$('marksList');
+  if(!state.marks.length){ box.innerHTML='<div class="empty">Todavía no marcaste nada. Selecciona texto en el documento.</div>'; return; }
+  box.innerHTML='';
+  [...state.marks].sort((a,b)=>a.from-b.from).forEach(m=>{
+    const b=document.createElement('button'); b.type='button'; b.className='mk';
+    b.innerHTML='<span class="tag" style="background:var(--c-'+m.cat+'-bg);color:var(--c-'+m.cat+')">'+m.cat+'</span><span class="t">'+esc(markText(m))+'</span>';
+    b.addEventListener('click',()=>{ const el=WORDS[m.from].el; el.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>openMenuForMark(m.id, el.getBoundingClientRect()),350); });
+    box.appendChild(b);
+  });
+}
+function addMark(from,to,cat){
+  // quitar marcas que se superponen
+  state.marks = state.marks.filter(m => m.to<from || m.from>to);
+  state.marks.push({id:'m'+(state.seq++), from, to, cat});
+  paintMarks();
+}
+
+/* ============ Selección -> palabras ============ */
+function cmpPoints(nA,oA,nB,oB){ const r=document.createRange(); r.setStart(nA,oA); r.collapse(true); return r.comparePoint(nB,oB); }
+function selectedWordRange(){
+  const sel=window.getSelection(); if(!sel || sel.isCollapsed || !sel.rangeCount) return null;
+  const range=sel.getRangeAt(0);
+  if(!$('doc').contains(range.commonAncestorContainer)) return null;
+  let from=-1,to=-1;
+  for(let i=0;i<WORDS.length;i++){
+    const el=WORDS[i].el; if(!range.intersectsNode(el)) continue;
+    const tn=el.firstChild, len=tn.length;
+    const endAfterStart = cmpPoints(tn,0, range.endContainer, range.endOffset) === 1;
+    const startBeforeEnd = cmpPoints(tn,len, range.startContainer, range.startOffset) === -1;
+    if(endAfterStart && startBeforeEnd){ if(from<0) from=i; to=i; }
+  }
+  if(from<0) return null;
+  return {from,to,rect:range.getBoundingClientRect()};
+}
+
+/* ============ Menú flotante ============ */
+let pending=null;
+function placeMenu(rect){
+  const menu=$('menu'); menu.classList.remove('hidden');
+  const mw=menu.offsetWidth, mh=menu.offsetHeight;
+  let x = rect.left + rect.width/2 - mw/2; x=Math.max(8, Math.min(x, window.innerWidth-mw-8));
+  let y = rect.bottom + 8; if(y+mh > window.innerHeight-8) y = Math.max(8, rect.top - mh - 8);
+  menu.style.left=x+'px'; menu.style.top=y+'px';
+}
+function catButtons(current){
+  return '<div class="grid">'+CAT_KEYS.map(k=>'<button type="button" class="cat" data-cat="'+k+'" style="background:var(--c-'+k+'-bg);color:var(--c-'+k+');'+(k===current?'border-color:var(--c-'+k+')':'')+'">'+CATS[k].n+'<small>'+CATS[k].d+'</small></button>').join('')+'</div>';
+}
+function openMenuForSelection(sel){
+  pending={type:'new', from:sel.from, to:sel.to};
+  const txt=[]; for(let i=sel.from;i<=sel.to;i++) txt.push(WORDS[i].el.textContent);
+  $('menu').innerHTML='<div class="mt">«'+esc(txt.join(' '))+'»</div>'+catButtons(null)+'<div class="row"><button type="button" data-act="cancel">Cancelar</button></div>';
+  placeMenu(sel.rect);
+  $('menu').querySelector('button.cat').focus({preventScroll:true});
+}
+function openMenuForMark(mid, rect){
+  const m=state.marks.find(x=>x.id===mid); if(!m) return;
+  pending={type:'edit', id:mid};
+  $('menu').innerHTML='<div class="mt">«'+esc(markText(m))+'»</div>'+catButtons(m.cat)+'<div class="row"><button type="button" class="del" data-act="del">Quitar marca</button><button type="button" data-act="cancel">Cerrar</button></div>';
+  placeMenu(rect);
+}
+function closeMenu(){ $('menu').classList.add('hidden'); pending=null; }
+$('menu').addEventListener('mousedown', e=>e.preventDefault()); // no perder la selección
+$('menu').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b||!pending) return;
+  if(b.dataset.cat){
+    if(pending.type==='new') addMark(pending.from,pending.to,b.dataset.cat);
+    else { const m=state.marks.find(x=>x.id===pending.id); if(m){ m.cat=b.dataset.cat; paintMarks(); } }
+    window.getSelection().removeAllRanges(); closeMenu();
+  } else if(b.dataset.act==='del'){ state.marks=state.marks.filter(x=>x.id!==pending.id); paintMarks(); closeMenu(); }
+  else if(b.dataset.act==='cancel'){ window.getSelection().removeAllRanges(); closeMenu(); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('menu').classList.contains('hidden')) closeMenu(); });
+document.addEventListener('mousedown', e=>{ if(!$('menu').classList.contains('hidden') && !$('menu').contains(e.target)) closeMenu(); });
+
+let touchMode=false, selTimer=null;
+function trySelection(){
+  const sel=selectedWordRange();
+  if(sel) openMenuForSelection(sel);
+}
+$('doc').addEventListener('mouseup', e=>{
+  if(touchMode) return;
+  setTimeout(()=>{
+    const s=window.getSelection();
+    if(s && !s.isCollapsed){ trySelection(); return; }
+    const w=e.target.closest('.w'); if(w && w.dataset.mark) openMenuForMark(w.dataset.mark, w.getBoundingClientRect());
+  },10);
+});
+$('doc').addEventListener('touchstart', ()=>{ touchMode=true; }, {passive:true});
+document.addEventListener('selectionchange', ()=>{
+  if(!touchMode || $('scrWork').classList.contains('hidden')) return;
+  clearTimeout(selTimer); selTimer=setTimeout(trySelection, 600);
+});
+$('doc').addEventListener('click', e=>{
+  if(!touchMode) return;
+  const s=window.getSelection(); if(s && !s.isCollapsed) return;
+  const w=e.target.closest('.w'); if(w && w.dataset.mark) openMenuForMark(w.dataset.mark, w.getBoundingClientRect());
+});
+
+/* ============ Modal ============ */
+function modal(title, text, actions){
+  $('modalT').textContent=title; $('modalP').textContent=text; const a=$('modalA'); a.innerHTML='';
+  actions.forEach(([label,primary,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='btn'+(primary?' btn-primary':''); b.textContent=label; b.onclick=()=>{ $('modal').classList.add('hidden'); fn&&fn(); }; a.appendChild(b); });
+  $('modal').classList.remove('hidden'); a.lastChild.focus();
+}
+
+/* ============ Calificación ============ */
+function grade(){
+  rebuildWordMark();
+  const byId = Object.fromEntries(state.marks.map(m=>[m.id,m]));
+  const itemWords = {};
+  WORDS.forEach((w,i)=>{ if(w.item){ (itemWords[w.item] ||= []).push(i); } });
+  const results=[]; let earned=0, max=0;
+  for(const id of Object.keys(ITEMS)){
+    const it=ITEMS[id], idx=itemWords[id]||[]; max+=it.w;
+    const covered=idx.filter(i=>wordMark[i]);
+    const frac = idx.length ? covered.length/idx.length : 0;
+    const status = frac>=0.8 ? 'full' : frac>0 ? 'partial' : 'missed';
+    let cat=null;
+    if(covered.length){ const cnt={}; covered.forEach(i=>{ const c=byId[wordMark[i]].cat; cnt[c]=(cnt[c]||0)+1; }); cat=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0]; }
+    const catOK = !!cat && it.cats.includes(cat);
+    const pts = it.w*(status==='full'?0.8:status==='partial'?0.4:0) + (status!=='missed' && catOK ? 0.2*it.w : 0);
+    earned+=pts;
+    const leftover = status==='partial' ? idx.filter(i=>!wordMark[i]).map(i=>WORDS[i].el.textContent).join(' ') : '';
+    results.push({id, status, cat, catOK, pts, leftover});
+  }
+  // marcas de más
+  const traps=new Set(), neutrals=new Set(); let plainWords=0, pureFP=0; const fpMarks=[];
+  for(const m of state.marks){
+    let hasKey=false, hasTrap=false, onlyNeutral=true;
+    for(let i=m.from;i<=m.to;i++){
+      const it=WORDS[i].item;
+      if(it && it[0]==='k') { hasKey=true; onlyNeutral=false; }
+      else if(it && it[0]==='t'){ traps.add(it); hasTrap=true; onlyNeutral=false; }
+      else if(it && it[0]==='n'){ neutrals.add(it); }
+      else { plainWords++; onlyNeutral=false; }
+    }
+    if(!hasKey && !onlyNeutral){ fpMarks.push(m); if(!hasTrap) pureFP++; }
+  }
+  const penalty = traps.size*3 + Math.floor(plainWords/10) + pureFP;
+  const base = max ? earned/max*100 : 0;
+  const score = Math.max(0, Math.round(base - penalty));
+  return {results, score, base:Math.round(base), penalty, traps:[...traps], neutrals:[...neutrals], plainWords, pureFP, fpMarks,
+    full:results.filter(r=>r.status==='full').length, partial:results.filter(r=>r.status==='partial').length,
+    missed:results.filter(r=>r.status==='missed').length, catOK:results.filter(r=>r.status!=='missed'&&r.catOK).length, total:results.length};
+}
+
+/* ============ Envío al docente ============ */
+async function sendToSheet(g){
+  const st=$('sendStatus');
+  if(!CONFIG.SHEETS_URL){ st.className='send'; st.textContent='Registro de notas no configurado: muestra esta pantalla a tu docente.'; return; }
+  st.className='send'; st.textContent='Enviando tu resultado al docente...';
+  const payload = { hoja: CONFIG.HOJA, datos: {
+    'Nombre': state.name, 'Nota (/100)': g.score, 'Intento': state.attempts,
+    'Minutos': Math.round((Date.now()-state.started)/60000),
+    'Bien': g.full, 'Incompletos': g.partial, 'Omitidos': g.missed, 'Total de datos': g.total,
+    'Categoría correcta': g.catOK, 'Trampas marcadas': g.traps.length, 'Palabras de más': g.plainWords,
+    'Marcas innecesarias': g.pureFP, 'Penalización': g.penalty,
+    'Datos omitidos': g.results.filter(r=>r.status==='missed').map(r=>itemText(r.id)).join(' | '),
+    'Navegador': navigator.userAgent.slice(0,120)
+  }};
+
+  try{
+    await fetch(CONFIG.SHEETS_URL,{method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload)});
+    st.className='send ok'; st.textContent='Resultado enviado al docente.';
+  }catch(e){
+    st.className='send bad'; st.textContent='No se pudo enviar el resultado (revisa tu conexión). Toma una captura de esta pantalla y envíala a tu docente.';
+  }
+}
+
+/* ============ Resultados ============ */
+const STATUS_TXT = {full:'Bien', partial:'Incompleto', missed:'Omitido', fp:'Innecesario', neutral:'Opcional'};
+let G=null, filterMode='problemas';
+function showResults(g){
+  G=g;
+  $('scrWork').classList.add('hidden'); $('scrResult').classList.remove('hidden');
+  $('submitBtn').classList.add('hidden'); $('countPill').classList.add('hidden');
+  $('scoreNum').innerHTML = g.score+'<small>/100</small>';
+  $('scoreTitle').textContent = g.score>=85 ? 'Excelente trabajo, '+state.name.split(' ')[0] : g.score>=60 ? 'Vas bien, '+state.name.split(' ')[0]+', pero se filtraron datos' : 'Este documento todavía no se puede subir a una IA';
+  $('scoreMsg').textContent = 'Encontraste '+g.full+' de '+g.total+' datos completos'+(g.partial?' y '+g.partial+' a medias':'')+'. '+(g.penalty?'Se restaron '+g.penalty+' puntos por marcar texto que no era necesario.':'No marcaste nada de más.');
+  $('stats').innerHTML = [
+    ['Bien',g.full,'ok'],['Incompletos',g.partial,'warn'],['Omitidos',g.missed,'bad'],['Categoría correcta',g.catOK+'/'+(g.full+g.partial),'accent'],['Marcas de más',g.pureFP+g.traps.length,'fp']
+  ].map(([l,v,c])=>'<div class="stat" style="background:var(--'+(c==='accent'?'accent-soft':c+'-bg')+');color:var(--'+(c==='accent'?'accent':c)+')"><b>'+v+'</b>'+l+'</div>').join('');
+
+  // documento corregido
+  const rw = buildDoc($('docReview'),'review');
+  const statusOf = Object.fromEntries(g.results.map(r=>[r.id,r]));
+  const fpWords = new Set(); g.fpMarks.forEach(m=>{ for(let i=m.from;i<=m.to;i++) fpWords.add(i); });
+  rw.forEach((w,i)=>{
+    const marked = !!wordMark[i];
+    if(w.item && statusOf[w.item]){
+      const st = statusOf[w.item].status;
+      w.el.classList.add(st==='partial' && !marked ? 'r-missed' : st==='partial' ? 'r-partial' : 'r-'+st);
+    } else if(marked && (!w.item || w.item[0]==='t')) w.el.classList.add('r-fp');
+  });
+  let n=1; const num={};
+  $('docReview').querySelectorAll('.badge').forEach(b=>{ const id=b.dataset.item; num[id]=n++; b.textContent=num[id]; b.classList.add(statusOf[id].status); b.setAttribute('aria-label','Ver explicación del dato '+num[id]); b.onclick=()=>flash(id); });
+  G.num=num;
+  buildDoc($('docAnon'),'anon');
+  renderExpl();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function flash(id){
+  if(filterMode!=='todos' && !document.getElementById('ex-'+id)){ filterMode='todos'; renderExpl(); }
+  const el=document.getElementById('ex-'+id); if(!el) return;
+  el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),1600);
+}
+function renderExpl(){
+  const g=G; const f=$('filter');
+  const modes=[['problemas','Errores'],['todos','Todos los datos'],['demas','Marcado de más']];
+  f.innerHTML=modes.map(([k,l])=>'<button type="button" aria-pressed="'+(filterMode===k)+'" data-f="'+k+'">'+l+'</button>').join('');
+  f.querySelectorAll('button').forEach(b=>b.onclick=()=>{ filterMode=b.dataset.f; renderExpl(); });
+  const box=$('expl'); box.innerHTML='';
+  const order={missed:0,partial:1,full:2};
+  if(filterMode!=='demas'){
+    const list = g.results.filter(r=> filterMode==='todos' || r.status!=='full' || !r.catOK).sort((a,b)=> order[a.status]-order[b.status] || g.num[a.id]-g.num[b.id]);
+    if(!list.length) box.innerHTML='<div class="ex full">No tienes errores en los datos clave. Revisa también la pestaña "Marcado de más".</div>';
+    list.forEach(r=>{
+      const it=ITEMS[r.id];
+      const yours = r.cat ? CATS[r.cat].n : 'Sin marcar';
+      const correct = it.cats.map(c=>CATS[c].n).join(' o ');
+      const catNote = r.status!=='missed' && !r.catOK ? ' <b style="color:var(--bad)">(categoría incorrecta)</b>' : '';
+      const d=document.createElement('div'); d.className='ex '+r.status; d.id='ex-'+r.id;
+      d.innerHTML='<div class="h"><span class="badge '+r.status+'">'+g.num[r.id]+'</span><span class="st '+r.status+'">'+STATUS_TXT[r.status]+'</span></div>'
+        +'<div class="q">'+esc(itemText(r.id))+'</div>'
+        +'<div class="meta">Tu clasificación: <b>'+yours+'</b>'+catNote+' · Correcta: <b>'+correct+'</b></div>'
+        +(r.leftover?'<div class="meta">Quedó sin anonimizar: «'+esc(r.leftover)+'»</div>':'')
+        +'<p class="why">'+esc(it.e)+'</p>'
+        +'<div class="meta">Reemplazo sugerido: <span class="chip">'+esc(it.r)+'</span></div>';
+      box.appendChild(d);
+    });
+  }
+  if(filterMode!=='problemas'){
+    const extra=[];
+    g.traps.forEach(t=>extra.push(['fp', itemText(t), TRAPS[t]+' (−3 puntos)']));
+    g.neutrals.forEach(t=>extra.push(['neutral', itemText(t), NEUTRALS[t]]));
+    g.fpMarks.filter(m=>{ for(let i=m.from;i<=m.to;i++){ const it=WORDS[i].item; if(it && it[0]==='t') return false; } return true; })
+      .forEach(m=>extra.push(['fp', markText(m), 'Este texto no contiene datos que identifiquen a una persona ni información confidencial. Anonimizar de más quita contexto y empeora la respuesta de la IA (−1 punto).']));
+    if(g.plainWords>=10) extra.push(['fp','Selecciones demasiado amplias','Marcaste '+g.plainWords+' palabras que no eran datos sensibles (por ejemplo, frases completas alrededor de un dato). Se resta 1 punto por cada 10 palabras de más: anonimiza el dato, no el párrafo.']);
+    if(filterMode==='demas' && !extra.length) box.innerHTML='<div class="ex full">No marcaste nada de más. Bien.</div>';
+    extra.forEach(([st,q,txt])=>{ const d=document.createElement('div'); d.className='ex '+st; d.innerHTML='<div class="h"><span class="st '+st+'">'+STATUS_TXT[st]+'</span></div><div class="q">'+esc(q)+'</div><p class="why">'+esc(txt)+'</p>'; box.appendChild(d); });
+  }
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected', x===t));
+  const anon = t.dataset.tab==='anon';
+  $('docAnon').classList.toggle('hidden',!anon); $('docReview').classList.toggle('hidden',anon); $('keyleg').classList.toggle('hidden',anon);
+}));
+
+/* ============ Flujo ============ */
+function legendHTML(compact){
+  return CAT_KEYS.map(k=> compact
+    ? '<div class="cat-row"><span class="sw" style="background:var(--c-'+k+'-bg);box-shadow:inset 0 -2px 0 var(--c-'+k+')"></span><div><b>'+CATS[k].n+'</b><br>'+CATS[k].d+'</div></div>'
+    : '<div style="background:var(--c-'+k+'-bg)"><b style="color:var(--c-'+k+')">'+CATS[k].n+'</b>'+CATS[k].d+'</div>').join('');
+}
+function startWork(){
+  $('scrStart').classList.add('hidden'); $('scrWork').classList.remove('hidden');
+  $('whoPill').textContent=state.name; ['whoPill','countPill','submitBtn'].forEach(id=>$(id).classList.remove('hidden'));
+  WORDS = buildDoc($('doc'),'work');
+  paintMarks();
+}
+$('startBtn').addEventListener('click',()=>{
+  const n=$('nameInput').value.trim().replace(/\s+/g,' ');
+  if(n.split(' ').length<2){ $('nameErr').textContent='Escribe tu nombre y al menos un apellido, para que tu docente pueda identificar tu entrega.'; $('nameInput').focus(); return; }
+  if(state.name!==n){ state.marks=[]; state.submitted=null; }
+  state.name=n; state.started=state.started||Date.now(); save(); startWork();
+});
+$('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('startBtn').click(); });
+$('submitBtn').addEventListener('click',()=>{
+  if(!state.marks.length){ modal('Aún no marcaste nada','Selecciona en el documento los datos que anonimizarías antes de entregar.',[['Volver al documento',true]]); return; }
+  modal('¿Entregar la actividad?','Hiciste '+state.marks.length+' marcas. Después de entregar verás la corrección y ya no podrás modificar tus respuestas.',[
+    ['Seguir revisando',false],
+    ['Entregar',true,()=>{ state.attempts=(state.attempts||0)+1; const g=grade(); state.submitted={score:g.score}; save(); showResults(g); sendToSheet(g); }]
+  ]);
+});
+
+/* ============ Inicio ============ */
+$('brandSub').textContent = CONFIG.CURSO+' · '+CONFIG.ACTIVIDAD;
+$('kicker').textContent = CONFIG.ACTIVIDAD;
+$('legendStart').innerHTML = legendHTML(false);
+$('legendSide').innerHTML = legendHTML(true);
+load();
+if(state.name) $('nameInput').value=state.name;
+if(state.name && state.submitted){
+  WORDS = buildDoc($('doc'),'work'); rebuildWordMark();
+  $('scrStart').classList.add('hidden'); $('whoPill').textContent=state.name; $('whoPill').classList.remove('hidden');
+  const g=grade(); showResults(g);
+  $('sendStatus').textContent='Esta actividad ya fue entregada desde este navegador.';
+}
+</script>
+</body>
+</html>

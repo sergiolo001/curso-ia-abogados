@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA para abogados · Actividades</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ground:#ECEFF2;--paper:#fff;--ink:#1B2430;--ink-2:#4A5563;--ink-3:#6B7480;--line:#D5DAE0;--accent:#1F4E79}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.5}
+main{max-width:860px;margin:0 auto;padding:48px 16px 64px}
+.kicker{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:40px;line-height:1.1;margin:8px 0 12px}
+.lead{color:var(--ink-2);margin:0 0 32px;max-width:620px}
+.list{display:grid;gap:16px}
+a.act{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 24px;color:inherit;text-decoration:none;min-height:44px}
+a.act:hover{border-color:var(--accent)}
+a.act:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.num{font-family:"Source Serif 4",Georgia,serif;font-size:40px;font-weight:700;color:var(--accent);width:48px;text-align:center}
+.mod{font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.act h2{margin:2px 0 4px;font-size:20px}
+.act p{margin:0;color:var(--ink-2);font-size:15px}
+.go{font-weight:700;color:var(--accent);white-space:nowrap}
+@media (max-width:600px){a.act{grid-template-columns:auto 1fr}.go{grid-column:2}}
+.foot{color:var(--ink-3);font-size:12px;margin-top:40px}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Curso</div>
+  <h1>IA para abogados</h1>
+  <p class="lead">Actividades prácticas del curso. Elige la que indique tu docente y escribe tu nombre completo al comenzar: tu nota se registra automáticamente.</p>
+  <div class="list">
+    <a class="act" href="actividad-1/">
+      <span class="num">1</span>
+      <span><span class="mod">Módulo 1 · Uso responsable de IA</span><h2>Anonimización antes de usar IA</h2><p>Marca en un memorial de demanda los datos que debes quitar antes de subirlo a una IA.</p></span>
+      <span class="go">Empezar &rarr;</span>
+    </a>
+    <a class="act" href="actividad-2/">
+      <span class="num">2</span>
+      <span><span class="mod">Módulo 2 · Ingeniería de prompts jurídicos</span><h2>Buen prompt o mal prompt</h2><p>Arrastra 12 prompts a la casilla que corresponde y descubre qué los hace buenos o riesgosos.</p></span>
+      <span class="go">Empezar &rarr;</span>
+    </a>
+  </div>
+  <p class="foot">Casos, documentos y datos ficticios con fines educativos.</p>
+</main>
+</body>
+</html>
