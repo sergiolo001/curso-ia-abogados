@@ -164,8 +164,9 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
 .filter button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
 .foot{color:var(--ink-3);font-size:12px;text-align:center;margin-top:32px}
 </style>
+<link rel="stylesheet" href="../tema.css">
 </head>
-<body>
+<body data-tema="Actividad 1 · Anonimización">
 
 <header class="topbar">
   <div class="topbar-in">
@@ -250,11 +251,12 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
       </aside>
     </div>
   </section>
-  <div class="foot">Documento ficticio con fines educativos. Cualquier parecido con personas, empresas o casos reales es coincidencia.</div>
+  <footer class="pie-curso"><span><b>IA generativa para profesionales del derecho</b> · Docente: Sergio Alcázar</span><span>Documento ficticio con fines educativos. Cualquier parecido con personas, empresas o casos reales es coincidencia.</span></footer>
 </main>
 
 <div class="menu hidden" id="menu" role="dialog" aria-label="Clasificar selección"></div>
 <script src="../config.js"></script>
+<script src="../dudas.js"></script>
 <div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
 
 <script>
@@ -266,7 +268,7 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
 const CC = window.CURSO_CONFIG || {};
 const CONFIG = {
   SHEETS_URL: CC.SHEETS_URL || '',
-  CURSO: CC.CURSO || 'IA para abogados',
+  CURSO: 'IA generativa para profesionales del derecho',
   ACTIVIDAD: 'Módulo 1 · Actividad 1: Anonimización',
   HOJA: 'Actividad 1 · Anonimización',
 };

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Lo dice el expediente? · Actividad 4</title>
+<link rel="stylesheet" href="../tema.css">
+</head>
+<body data-tema="Módulo 4 · Análisis de expedientes">
+<script src="../config.js"></script>
+<script src="../horario.js"></script>
+<script src="../dudas.js"></script>
+<script>
+/* =====================================================================
+   ACTIVIDAD 4 · ¿Lo dice el expediente o lo inventó la IA? (Módulo 4)
+   ok = respuestas aceptadas · e = explicación · s = qué hacer
+   ===================================================================== */
+window.ACT = {
+  id: 'actividad-4',
+  hoja: 'Actividad 4 · Expediente',
+  actividad: 'Módulo 4 · Actividad 4',
+  corto: 'Actividad 4',
+  titulo: '¿Lo dice el expediente?',
+  pregunta: '¿Lo dice el expediente o lo inventó la IA?',
+  intro: '<p>Un colega le pidió a una IA que resumiera un expediente laboral y te mandó el resumen para que lo uses en una audiencia. Antes de usarlo, compara cada afirmación con los extractos del expediente. La IA escribe con la misma seguridad cuando acierta que cuando se equivoca.</p>',
+  pasos: [
+    'A la izquierda tienes los extractos del expediente (ficticio y ya anonimizado). Esa es tu única fuente.',
+    'A la derecha está el resumen de la IA, dividido en 12 afirmaciones.',
+    'Clasifica cada una: <b>Correcta</b>, <b>Contradice el expediente</b> o <b>No está en el expediente</b>.',
+    'Al entregar verás qué documento la confirma o la desmiente.'
+  ],
+  opciones: [
+    {k:'ok',  label:'Correcta',                  c:'green',  desc:'El expediente la respalda tal cual'},
+    {k:'con', label:'Contradice el expediente',  c:'red',    desc:'El expediente dice otra cosa'},
+    {k:'inv', label:'No está en el expediente',  c:'orange', desc:'Ningún documento la menciona: posible invención'},
+  ],
+  contexto: {
+    titulo: 'Extractos del expediente',
+    sub: 'Proceso laboral por pago de beneficios sociales. Documento ficticio.',
+    html: `
+      <div class="doc"><h3>Doc. 1 · Contrato de trabajo</h3><p>[EMPRESA B] contrata a [TRABAJADORA A] como Analista de Créditos, a partir del 2 de mayo de 2019, por tiempo indefinido, con un haber mensual de Bs 7.200.</p></div>
+      <div class="doc"><h3>Doc. 2 · Memorándum de 14 de marzo de 2026</h3><p>"Por medio del presente se le comunica que, debido a la reestructuración del área de créditos, se prescinde de sus servicios a partir del 15 de marzo de 2026."</p></div>
+      <div class="doc"><h3>Doc. 3 · Demanda (presentada el 22 de abril de 2026)</h3><p>Ante el Juzgado 2.° de Trabajo y Seguridad Social de La Paz, [TRABAJADORA A] demanda el pago de indemnización por tiempo de servicios, desahucio, aguinaldo proporcional y quince (15) días de vacaciones no gozadas.</p></div>
+      <div class="doc"><h3>Doc. 4 · Contestación (presentada el 20 de mayo de 2026)</h3><p>[EMPRESA B] niega adeudar beneficios y sostiene que la trabajadora abandonó su fuente laboral desde el 10 de marzo de 2026. Adjunta planillas de asistencia.</p></div>
+      <div class="doc"><h3>Doc. 5 · Acta de audiencia de 18 de junio de 2026</h3><p>[TESTIGO 1], compañera de área, declara que [TRABAJADORA A] asistió normalmente a trabajar hasta el 14 de marzo de 2026, día en que recibió el memorándum.</p></div>`
+  },
+  itemsTitulo: 'Resumen generado por la IA',
+  sugLabel: 'Qué hacer',
+  resultadoTip: 'Una sola afirmación falsa en un memorial basta para perder credibilidad ante el juez: verifica siempre contra el expediente.',
+  items: [
+    {id:'a01', ref:'Afirmación 1', ok:['ok'],
+     text:'La trabajadora ingresó a la empresa el 2 de mayo de 2019 como Analista de Créditos.',
+     e:'Coincide con el contrato de trabajo (Doc. 1).'},
+    {id:'a02', ref:'Afirmación 2', ok:['ok'],
+     text:'Su haber mensual era de Bs 7.200.',
+     e:'Coincide con el contrato de trabajo (Doc. 1).'},
+    {id:'a03', ref:'Afirmación 3', ok:['con'],
+     text:'Fue despedida mediante memorándum de 14 de febrero de 2026.',
+     e:'El memorándum es del 14 de marzo de 2026 (Doc. 2). Un error de un mes en la fecha cambia el cálculo de beneficios y de plazos: es el tipo de error que la IA comete con total seguridad.',
+     s:'Corregir la fecha y, como regla, verificar cada fecha del resumen contra el documento original antes de usarla.'},
+    {id:'a04', ref:'Afirmación 4', ok:['con'],
+     text:'La empresa sostuvo en todo momento que la causa del despido fue la reestructuración del área.',
+     e:'El memorándum habla de reestructuración (Doc. 2), pero en la contestación la empresa alega abandono de trabajo (Doc. 4). Esa contradicción de la contraparte es justamente el mejor argumento del caso, y el resumen de la IA la borró.',
+     s:'Pedirle a la IA, de forma expresa, que identifique contradicciones entre los documentos de la contraparte, citando el documento de cada versión.'},
+    {id:'a05', ref:'Afirmación 5', ok:['ok'],
+     text:'La demanda se presentó el 22 de abril de 2026 ante el Juzgado 2.° de Trabajo y Seguridad Social de La Paz.',
+     e:'Coincide con la demanda (Doc. 3).'},
+    {id:'a06', ref:'Afirmación 6', ok:['inv'],
+     text:'Además de los beneficios sociales, la trabajadora reclama Bs 50.000 por daño moral.',
+     e:'Ningún documento menciona daño moral. La IA "completó" la demanda con un reclamo habitual en otros casos. Si lo repites en audiencia, estás afirmando algo que tu propia demanda no dice.',
+     s:'Eliminarla. Pedir a la IA que indique, para cada afirmación, el documento y el párrafo de donde la saca.'},
+    {id:'a07', ref:'Afirmación 7', ok:['con'],
+     text:'Se reclaman treinta (30) días de vacaciones no gozadas.',
+     e:'La demanda reclama quince (15) días (Doc. 3). Un error en una cifra se arrastra a la liquidación.',
+     s:'Corregir la cifra y revisar uno por uno los montos y cantidades del resumen.'},
+    {id:'a08', ref:'Afirmación 8', ok:['ok'],
+     text:'La contestación a la demanda se presentó el 20 de mayo de 2026.',
+     e:'Coincide con la contestación (Doc. 4).'},
+    {id:'a09', ref:'Afirmación 9', ok:['inv'],
+     text:'En su contestación, la empresa reconoció que adeuda el aguinaldo proporcional.',
+     e:'La contestación niega adeudar beneficios (Doc. 4). No hay ningún reconocimiento. Es una invención que favorece a nuestra clienta: por eso es tan peligrosa, porque uno tiende a creer lo que le conviene.',
+     s:'Eliminarla. Si el reconocimiento existiera, tendría que estar en un documento concreto que puedas citar.'},
+    {id:'a10', ref:'Afirmación 10', ok:['ok'],
+     text:'En audiencia, una testigo declaró que la trabajadora asistió a trabajar hasta el 14 de marzo de 2026.',
+     e:'Coincide con el acta de audiencia (Doc. 5), y desmiente la tesis de abandono desde el 10 de marzo.'},
+    {id:'a11', ref:'Afirmación 11', ok:['con'],
+     text:'Al momento del despido, la trabajadora tenía más de ocho años de antigüedad.',
+     e:'Del 2 de mayo de 2019 al 15 de marzo de 2026 hay menos de siete años (Doc. 1 y 2). La IA no calcula: genera texto probable. Los cálculos se hacen y se verifican por separado.',
+     s:'Calcular la antigüedad por fuera de la IA (o pedirle el cálculo paso a paso) y verificarlo con las fechas de los documentos.'},
+    {id:'a12', ref:'Afirmación 12', ok:['inv'],
+     text:'Según el Auto Supremo N.° 412/2019 de la Sala Social del Tribunal Supremo de Justicia, la reestructuración no justifica el despido sin pago de beneficios sociales.',
+     e:'Ningún documento del expediente cita esa resolución, y el resumen no dice de dónde la sacó. Puede no existir o no decir eso. Es el error de Mata v. Avianca: citar jurisprudencia que nadie verificó.',
+     s:'No usarla hasta localizarla en la fuente oficial del Tribunal Supremo y leer el texto completo. Preguntarle a la IA si existe no es verificar.'},
+  ]
+};
+</script>
+<script src="../motor.js"></script>
+</body>
+</html>

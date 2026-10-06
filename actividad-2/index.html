@@ -134,8 +134,48 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
 .better .txt{background:transparent;padding:0;margin:0}
 .foot{color:var(--ink-3);font-size:12px;text-align:center;margin-top:32px}
 </style>
+<link rel="stylesheet" href="../tema.css">
 </head>
-<body>
+<body data-tema="Actividad 2 · Buen prompt o mal prompt">
+
+<!-- CANDADO: bloquea la actividad hasta la fecha definida en ../horario.js -->
+<style>
+.lock{position:fixed;inset:0;z-index:1000;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:16px}
+.lock-box{background:var(--paper);border:1px solid var(--line);border-radius:16px;max-width:520px;width:100%;padding:36px 32px;text-align:center}
+.lock-ico{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.lock-box h1{font-family:var(--serif);font-size:28px;margin:0 0 8px;line-height:1.2}
+.lock-box p{color:var(--ink-2);margin:0 0 8px}
+.lock-when{font-weight:700;color:var(--ink);font-size:18px;margin:14px 0 4px !important}
+.lock-left{font-size:14px;color:var(--ink-3) !important;margin-bottom:24px !important}
+.lock-box a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600}
+body.locked{overflow:hidden}
+</style>
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-labelledby="lockT">
+  <div class="lock-box">
+    <span class="lock-ico" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+    <h1 id="lockT">Actividad 2 todavía cerrada</h1>
+    <p id="lockMsg">Verificando el horario de apertura...</p>
+    <p class="lock-when" id="lockWhen"></p>
+    <p class="lock-left" id="lockLeft"></p>
+    <a href="../">Volver a la portada del curso</a>
+  </div>
+</div>
+<script src="../horario.js"></script>
+<script>
+(function(){
+  document.body.classList.add('locked');
+  const lock=document.getElementById('lock');
+  function abrir(){ lock.remove(); document.body.classList.remove('locked'); }
+  if(!window.CursoHorario){ abrir(); return; }
+  CursoHorario.sincronizar().then(function revisar(){
+    if(!CursoHorario.bloqueada('actividad-2')){ abrir(); return; }
+    document.getElementById('lockMsg').textContent='Esta actividad se habilita el';
+    document.getElementById('lockWhen').textContent=CursoHorario.textoApertura('actividad-2');
+    document.getElementById('lockLeft').textContent='Faltan '+CursoHorario.faltan('actividad-2')+'. La página se abrirá sola cuando llegue la hora.';
+    setTimeout(revisar,30000);
+  });
+})();
+</script>
 
 <header class="topbar">
   <div class="topbar-in">
@@ -214,17 +254,18 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
     <div class="filter" id="filter"></div>
     <div class="res-list" id="resList"></div>
   </section>
-  <div class="foot">Prompts y casos ficticios con fines educativos.</div>
+  <footer class="pie-curso"><span><b>IA generativa para profesionales del derecho</b> · Docente: Sergio Alcázar</span><span>Prompts y casos ficticios con fines educativos.</span></footer>
 </main>
 
 <script src="../config.js"></script>
+<script src="../dudas.js"></script>
 <div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
 
 <script>
 const CC = window.CURSO_CONFIG || {};
 const CONFIG = {
   SHEETS_URL: CC.SHEETS_URL || '',
-  CURSO: CC.CURSO || 'IA para abogados',
+  CURSO: 'IA generativa para profesionales del derecho',
   ACTIVIDAD: 'Módulo 2 · Actividad 2: Buen prompt o mal prompt',
   HOJA: 'Actividad 2 · Prompts',
 };

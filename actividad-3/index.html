@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría de contrato · Actividad 3</title>
+<link rel="stylesheet" href="../tema.css">
+</head>
+<body data-tema="Módulo 3 · Redacción y revisión contractual">
+<script src="../config.js"></script>
+<script src="../horario.js"></script>
+<script src="../dudas.js"></script>
+<script>
+/* =====================================================================
+   ACTIVIDAD 3 · Auditoría de contrato (Módulo 3)
+   ok = respuestas aceptadas · e = explicación · s = redacción sugerida
+   ===================================================================== */
+window.ACT = {
+  id: 'actividad-3',
+  hoja: 'Actividad 3 · Contrato',
+  actividad: 'Módulo 3 · Actividad 3',
+  corto: 'Actividad 3',
+  titulo: 'Auditoría de contrato',
+  pregunta: '¿Firmarías este contrato a nombre de tu cliente?',
+  intro: '<p>Tu cliente, <b>[LA CONSULTORA]</b>, presta servicios contables. La empresa <b>[LA CONTRATANTE]</b> le envió este contrato para firmar. Antes de pedirle a una IA que lo mejore, tienes que saber detectar tú mismo qué está mal: si no, no podrás revisar lo que la IA te devuelva.</p>',
+  pasos: [
+    'Lee el encargo y las 13 cláusulas.',
+    'Clasifica cada cláusula desde el punto de vista de <b>tu cliente, LA CONSULTORA</b>.',
+    'Puedes cambiar tus respuestas hasta que presiones <b>Entregar</b>.',
+    'En la corrección verás el riesgo de cada cláusula y una redacción sugerida.'
+  ],
+  opciones: [
+    {k:'ok',   label:'Correcta',      c:'green',  desc:'Equilibrada y completa para ambas partes'},
+    {k:'des',  label:'Desbalanceada', c:'red',    desc:'Carga a tu cliente con riesgos o costos desproporcionados'},
+    {k:'vac',  label:'Vacío',         c:'orange', desc:'Le falta un elemento esencial para funcionar'},
+    {k:'con',  label:'Contradictoria',c:'navy',   desc:'Choca con otra cláusula del mismo contrato'},
+  ],
+  contexto: {
+    titulo: 'El encargo',
+    sub: 'Contrato de prestación de servicios de asesoría contable y tributaria. Documento ficticio.',
+    html: `
+      <div class="doc"><h3>Tu cliente</h3><p>[LA CONSULTORA], firma de asesoría contable con 4 profesionales. Factura en promedio Bs 8.000 mensuales por cliente.</p></div>
+      <div class="doc"><h3>Lo que te pidió</h3><p>"Revisa el contrato antes de firmar. No quiero sorpresas con los pagos ni quedar amarrada si la relación se termina."</p></div>
+      <div class="doc"><h3>Cómo revisar</h3><p>Lee cada cláusula y pregúntate: ¿qué pasa si algo sale mal? ¿Quién paga? ¿Cuándo termina? ¿Choca con otra cláusula?</p></div>
+      <div class="doc"><h3>Recuerda</h3><p>Una cláusula puede estar bien redactada y aun así perjudicar a tu cliente. Y la IA, si no se lo pides de forma expresa, rara vez señala las contradicciones entre cláusulas.</p></div>`
+  },
+  itemsTitulo: 'Las 13 cláusulas',
+  sugLabel: 'Redacción sugerida',
+  resultadoTip: 'Lee la redacción sugerida de cada cláusula: es lo que deberías exigirle a la IA cuando le pidas revisar un contrato.',
+  items: [
+    {id:'c01', ref:'Cláusula primera · Objeto', ok:['ok'],
+     text:'LA CONSULTORA prestará a LA CONTRATANTE servicios de asesoría contable y tributaria, que comprenden el registro contable mensual, la preparación de declaraciones impositivas y la atención de consultas tributarias por escrito.',
+     e:'El objeto está bien delimitado: dice qué servicios se prestan y cuáles no. Eso protege a tu cliente de que se le exijan tareas adicionales sin pago.'},
+    {id:'c02', ref:'Cláusula segunda · Vigencia', ok:['vac'],
+     text:'El presente contrato entrará en vigencia a partir de la fecha de su suscripción.',
+     e:'Dice cuándo empieza, pero no cuándo termina ni si se renueva. Sin plazo, cualquier discusión sobre la terminación queda abierta, justo lo que tu cliente quería evitar.',
+     s:'El contrato tendrá una vigencia de doce (12) meses desde su suscripción y se renovará automáticamente por períodos iguales, salvo que una de las partes comunique por escrito su decisión de no renovarlo con treinta (30) días de anticipación.'},
+    {id:'c03', ref:'Cláusula tercera · Honorarios', ok:['ok'],
+     text:'LA CONTRATANTE pagará a LA CONSULTORA un honorario mensual de Bs 8.000 (Ocho mil 00/100 bolivianos), dentro de los diez (10) días calendario siguientes a la presentación de la factura correspondiente.',
+     e:'Monto, moneda, periodicidad y plazo de pago están claros. Es una cláusula correcta... pero fíjate en la cláusula de facturación.'},
+    {id:'c04', ref:'Cláusula cuarta · Facturación', ok:['con'],
+     text:'Las facturas serán pagadas por LA CONTRATANTE a los sesenta (60) días calendario de su recepción, previa conformidad del área de finanzas.',
+     e:'Contradice la cláusula tercera: allí el pago es a 10 días y aquí a 60, y además se condiciona a una "conformidad" que no tiene plazo. Ante dos plazos distintos, la contraparte aplicará el que le convenga.',
+     s:'Eliminar esta cláusula o unificarla con la tercera: "Las facturas serán pagadas dentro de los diez (10) días calendario de su presentación. Si LA CONTRATANTE tuviera observaciones, deberá comunicarlas por escrito dentro de los cinco (5) primeros días; vencido ese plazo, la factura se tendrá por aceptada."'},
+    {id:'c05', ref:'Cláusula quinta · Modificación del servicio', ok:['des'],
+     text:'LA CONTRATANTE podrá ampliar o modificar el alcance de los servicios en cualquier momento, mediante simple comunicación escrita, sin que ello implique variación del honorario pactado.',
+     e:'Permite a una sola parte ampliar el trabajo sin pagar más. En la práctica, el honorario fijo termina cubriendo cualquier tarea nueva.',
+     s:'Toda ampliación o modificación del alcance de los servicios deberá acordarse por escrito entre ambas partes, junto con el ajuste del honorario y de los plazos que corresponda.'},
+    {id:'c06', ref:'Cláusula sexta · Entregables', ok:['vac'],
+     text:'LA CONSULTORA entregará informes periódicos sobre la situación contable y tributaria de LA CONTRATANTE.',
+     e:'"Periódicos" no dice cada cuánto, en qué formato ni en qué plazo. Combinada con la penalidad por retraso de la cláusula décima segunda, esta vaguedad es peligrosa: ¿retraso respecto de qué fecha?',
+     s:'LA CONSULTORA entregará un informe mensual, en formato digital, hasta el día quince (15) de cada mes, siempre que LA CONTRATANTE haya entregado la documentación necesaria hasta el día cinco (5).'},
+    {id:'c07', ref:'Cláusula séptima · Responsabilidad', ok:['des'],
+     text:'LA CONSULTORA responderá en forma ilimitada por cualquier daño, directo o indirecto, incluidas multas y sanciones tributarias, aun cuando estas deriven de información incompleta o incorrecta proporcionada por LA CONTRATANTE.',
+     e:'Responsabilidad ilimitada, por daños indirectos y aun por errores del propio cliente: es el riesgo más grave del contrato. Una sola multa podría superar todo lo que tu cliente cobra en años.',
+     s:'La responsabilidad de LA CONSULTORA se limitará a los daños directos causados por su culpa y no excederá el total de honorarios percibidos en los doce (12) meses anteriores al hecho. LA CONSULTORA no responderá por consecuencias derivadas de información incompleta o incorrecta proporcionada por LA CONTRATANTE.'},
+    {id:'c08', ref:'Cláusula octava · Confidencialidad', ok:['ok'],
+     text:'Ambas partes mantendrán en reserva la información a la que accedan con motivo del presente contrato, durante su vigencia y por tres (3) años posteriores a su terminación, salvo requerimiento de autoridad competente.',
+     e:'Es recíproca, tiene plazo y prevé la excepción por orden de autoridad. Es una cláusula equilibrada.'},
+    {id:'c09', ref:'Cláusula novena · Terminación', ok:['des'],
+     text:'LA CONTRATANTE podrá resolver el contrato en cualquier momento, sin expresión de causa y sin pago alguno. LA CONSULTORA solo podrá hacerlo con noventa (90) días de preaviso y pagando una penalidad equivalente a tres (3) meses de honorarios.',
+     e:'Una parte puede irse cuando quiera y gratis; la otra, con 90 días de aviso y pagando una penalidad. Es exactamente el "quedar amarrada" que tu cliente quería evitar.',
+     s:'Cualquiera de las partes podrá resolver el contrato sin expresión de causa, comunicándolo por escrito con treinta (30) días de anticipación. En todos los casos, LA CONTRATANTE pagará los servicios prestados hasta la fecha efectiva de terminación.'},
+    {id:'c10', ref:'Cláusula décima · Propiedad de los informes', ok:['ok'],
+     text:'Los informes elaborados por LA CONSULTORA pasarán a ser propiedad de LA CONTRATANTE una vez pagados los honorarios correspondientes.',
+     e:'Condicionar la transferencia de los informes al pago es razonable y protege a tu cliente.'},
+    {id:'c11', ref:'Cláusula décima primera · Controversias', ok:['vac','con'],
+     text:'Cualquier controversia derivada del presente contrato será resuelta mediante arbitraje.',
+     e:'Tiene dos problemas: no dice qué centro de arbitraje, en qué ciudad ni cuántos árbitros (un vacío que provoca discusiones antes de empezar), y además choca con la cláusula siguiente, que envía los conflictos a los jueces ordinarios. Se acepta cualquiera de las dos respuestas.',
+     s:'Las controversias se resolverán mediante arbitraje de derecho, administrado por [CENTRO DE ARBITRAJE] con sede en La Paz, conforme a la Ley N° 708 de Conciliación y Arbitraje, a cargo de un árbitro único. (Y eliminar la cláusula décima tercera).'},
+    {id:'c12', ref:'Cláusula décima segunda · Penalidad por retraso', ok:['des'],
+     text:'Por cada día de retraso en la entrega de los informes, LA CONSULTORA pagará una penalidad del cinco por ciento (5 %) del honorario mensual. El contrato no prevé penalidad alguna por retraso en los pagos de LA CONTRATANTE.',
+     e:'La penalidad corre solo contra tu cliente, y a un 5 % diario: en 20 días de retraso pierde el honorario completo del mes. Mientras tanto, la contraparte puede pagar tarde sin consecuencia.',
+     s:'Establecer penalidades recíprocas y razonables: un 0,5 % diario del honorario mensual por retraso en los informes (con un tope del 10 %) e intereses por mora a cargo de LA CONTRATANTE si paga fuera de plazo.'},
+    {id:'c13', ref:'Cláusula décima tercera · Jurisdicción', ok:['con'],
+     text:'Para cualquier divergencia emergente del presente contrato, las partes se someten a la jurisdicción de los jueces ordinarios de la ciudad de La Paz.',
+     e:'Contradice la cláusula de arbitraje: el contrato manda los mismos conflictos a dos vías distintas. Eso suele terminar en una discusión previa sobre quién es competente, que retrasa todo.',
+     s:'Eliminar esta cláusula si se opta por el arbitraje, o eliminar la de arbitraje si se prefiere la vía judicial. Nunca ambas.'},
+  ]
+};
+</script>
+<script src="../motor.js"></script>
+</body>
+</html>
