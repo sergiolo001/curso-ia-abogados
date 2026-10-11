@@ -3,177 +3,471 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IA generativa para profesionales del derecho</title>
-<link rel="stylesheet" href="tema.css">
+<title>Auditoría de contrato · Actividad 3</title>
+<link rel="stylesheet" href="../tema.css">
 <style>
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);line-height:1.5;border-top:6px solid var(--cyan)}
-a{color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+body{color:var(--ink);line-height:1.5}
+button,input,select,textarea{font:inherit}
+.hidden{display:none !important}
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:18px}
+.brand{font-weight:700;font-size:15px}.brand small{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+.spacer{flex:1}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--ink-2);background:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:10px 18px;font-weight:700;min-height:44px;cursor:pointer}
+.btn-primary{color:#fff}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 40px}
 
-/* Portada */
-.hero{display:grid;grid-template-columns:1fr 1fr;min-height:480px;background:var(--navy);color:#fff}
-.hero-txt{padding:72px 56px 64px max(20px,calc((100vw - 1180px)/2 + 20px));display:flex;flex-direction:column;justify-content:center}
-.hero .k{color:#5FD3EC;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 18px}
-.hero h1{font-size:clamp(34px,4.4vw,54px);line-height:1.08;margin:0 0 18px;font-weight:900;letter-spacing:-.015em}
-.hero p.sub{font-size:18px;color:#C9D6E6;margin:0 0 28px;max-width:520px}
-.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.hero-chips span{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 14px;font-size:14px;color:#E6EEF7}
-.hero a.cta{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--cyan);color:var(--navy);text-decoration:none;font-weight:900;border-radius:10px;padding:13px 22px;min-height:48px}
-.hero a.cta:hover{background:#3FC9E4}
-.hero-img{background:url(hero.jpg) center/cover no-repeat;min-height:320px}
-@media (max-width:860px){.hero{grid-template-columns:1fr}.hero-txt{padding:48px 20px}.hero-img{min-height:240px;order:-1}}
+/* Inicio */
+.intro{max-width:780px;margin:24px auto;background:var(--paper);border:1px solid var(--line);padding:36px}
+@media (max-width:600px){.intro{padding:24px 18px}}
+.kicker{font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.intro h1{font-size:34px;margin:8px 0 6px;line-height:1.15}
+.intro .subt{font-size:18px;color:var(--ink-2);margin:0 0 18px}
+.intro p,.intro li{color:var(--ink-2)}
+.intro ol{padding-left:20px}
+.role{display:flex;gap:12px;align-items:flex-start;background:var(--navy);color:#fff;border-radius:12px;padding:16px 18px;margin:18px 0}
+.role b{color:#5FD3EC;display:block;font-size:12px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.lenses{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 6px}
+@media (max-width:640px){.lenses{grid-template-columns:1fr}}
+.lenses div{border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink-2)}
+.lenses b{display:block;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px;margin:20px 0 8px}
+.field label{font-weight:700;font-size:14px}
+.field input{padding:12px 14px;border:1px solid var(--line);border-radius:8px;min-height:44px}
+.field input:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.err{color:var(--red);font-size:14px;min-height:20px}
 
-section.blk{padding:64px 0 0}
-.blk h2{font-size:34px;font-weight:900;margin:0 0 6px;letter-spacing:-.01em}
-.blk .lead{color:var(--ink-3);font-size:17px;margin:0 0 28px}
+/* Trabajo */
+.work{max-width:900px;margin:0 auto}
+.brief{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+@media (max-width:760px){.brief{grid-template-columns:1fr}}
+.brief .role{margin:0}
+.ia-note{display:flex;gap:12px;align-items:flex-start;background:var(--cyan-soft);border:1px solid #BFE7F2;border-radius:12px;padding:14px 16px;font-size:15px;color:var(--navy);font-weight:700}
+.ia-note svg,.role svg{flex:none;margin-top:2px}
+.contract{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:40px 48px}
+@media (max-width:700px){.contract{padding:24px 16px}}
+.fict{display:block;text-align:center;border:2px solid var(--red);color:var(--red);background:var(--red-soft);border-radius:8px;padding:6px 10px;font-weight:900;letter-spacing:.04em;font-size:14px;margin-bottom:22px}
+.contract h2{font-family:"Source Serif 4",Georgia,serif;text-align:center;font-size:20px;margin:0 0 18px;letter-spacing:.02em}
+.contract .pre{font-family:"Source Serif 4",Georgia,serif;font-size:16px;line-height:1.7;text-align:justify;margin:0 0 22px;color:#1a2533}
+.cl{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 14px;background:#FBFCFE}
+.cl.marked{border-left-color:var(--c,var(--cyan));background:#fff}
+.cl h3{margin:0 0 6px;font-family:"Source Serif 4",Georgia,serif;font-size:16px;letter-spacing:.02em}
+.cl .txt{font-family:"Source Serif 4",Georgia,serif;font-size:16px;line-height:1.7;margin:0 0 12px;color:#1a2533;text-align:justify}
+.cl fieldset{border:0;padding:0;margin:0}
+.cl legend{font-size:13px;font-weight:700;color:var(--ink-3);margin-bottom:6px;padding:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt span{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;user-select:none;color:var(--k)}
+.opt span::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid currentColor;opacity:.55}
+.opt input:checked + span{background:var(--k);border-color:var(--k);color:#fff}
+.opt input:checked + span::before{background:#fff;border-color:#fff;opacity:1}
+.opt input:focus-visible + span{outline:3px solid var(--cyan);outline-offset:2px}
+.extra{margin-top:12px;display:grid;gap:10px}
+.extra label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:4px}
+.extra select,.extra textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff;color:var(--ink);min-height:44px}
+.extra textarea{min-height:70px;resize:vertical}
+.extra .opc{font-weight:400;color:var(--ink-3)}
+.sign{font-family:"Source Serif 4",Georgia,serif;font-size:16px;color:#1a2533;margin:22px 0 0}
+.bottom-submit{display:flex;justify-content:flex-end;margin-top:18px}
 
-/* Docente */
-.doc-grid{display:grid;grid-template-columns:300px 1fr;gap:36px;align-items:center}
-@media (max-width:760px){.doc-grid{grid-template-columns:1fr}.doc-grid img{max-width:260px}}
-.doc-grid img{width:100%;border-radius:14px;display:block;aspect-ratio:4/5;object-fit:cover}
-.doc-k{color:#0E87A3;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
-.doc-grid h3{font-size:38px;font-weight:900;margin:4px 0 4px}
-.doc-grid .role{color:var(--ink-3);font-size:17px;margin:0 0 20px}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:560px){.facts{grid-template-columns:1fr}}
-.fact{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:15px}
-.li-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;min-height:44px;padding:10px 18px;border-radius:10px;background:#0A66C2;color:#fff !important;text-decoration:none;font-weight:700}
-.li-btn:hover{background:#004182}
-.fact i{flex:none;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(11,39,71,.5);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--paper);max-width:460px;width:100%;padding:24px}
+.modal h3{margin:0 0 8px}.modal p{color:var(--ink-2);margin:0 0 18px}
+.modal .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 
-/* Ruta */
-.ruta{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media (max-width:1000px){.ruta{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.ruta{grid-template-columns:1fr}}
-a.mod{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px 20px;text-decoration:none;color:var(--ink);transition:border-color .15s, transform .15s, box-shadow .15s;min-height:300px}
-a.mod:hover{border-color:var(--c);transform:translateY(-2px);box-shadow:0 10px 24px rgba(11,39,71,.08)}
-a.mod:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
-.mod .ic{width:52px;height:52px;border-radius:50%;background:var(--c);color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
-.mod .mk{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--c)}
-.mod h3{font-size:19px;font-weight:900;margin:4px 0 10px;line-height:1.25}
-.mod .act{border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
-.mod .act b{display:block;font-size:13px;color:var(--ink-3);font-weight:700;margin-bottom:2px}
-.mod .act span{font-size:15px;font-weight:700}
-.mod .act p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
-.mod .go{margin-top:14px;font-weight:900;color:var(--c);font-size:15px}
-a.mod.is-locked{cursor:not-allowed;background:#F7F9FB;border-style:dashed}
-a.mod.is-locked:hover{transform:none;box-shadow:none;border-color:var(--line)}
-a.mod.is-locked .ic{background:#A9B7C6}
-a.mod.is-locked .go{color:var(--ink-3)}
-.lockinfo{display:flex !important;align-items:flex-start;gap:6px;margin-top:12px;font-size:13px !important;font-weight:700;color:var(--ink-2);background:#E8EDF3;border-radius:8px;padding:7px 10px;line-height:1.35}
-.lockinfo svg{flex:none;margin-top:1px}
+/* Resultados */
+.score-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:24px 28px;margin-bottom:20px}
+@media (max-width:700px){.score-head{grid-template-columns:1fr}}
+.score{font-size:72px;line-height:1}.score small{font-size:24px;color:var(--ink-3)}
+.score-head h2{margin:0 0 4px;font-size:22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700}.stat b{font-size:18px;display:block}
+.send{font-size:13px;color:var(--ink-3);margin-top:10px}.send.ok{color:var(--green)}.send.bad{color:var(--red)}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:20px}
+.box h3{margin:0 0 10px;font-size:18px}
+.missed-box{border-color:#F2BDC5;background:var(--red-soft)}
+.missed-box ul{margin:0;padding-left:20px}
+.missed-box li{margin:4px 0}
+table.res{width:100%;border-collapse:collapse;font-size:14.5px}
+table.res th{text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);padding:10px 12px;border-bottom:2px solid var(--line)}
+table.res td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.res tr.miss td{background:var(--red-soft)}
+table.res tr.miss td:first-child{box-shadow:inset 4px 0 0 var(--red)}
+.lens-tag{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
+.st{display:inline-block;border-radius:6px;padding:3px 8px;font-size:12.5px;font-weight:700;line-height:1.35}
+.st.ok{background:var(--green-soft);color:var(--green)}
+.st.half{background:var(--orange-soft);color:var(--orange)}
+.st.no{background:#fff;color:var(--red);border:1px solid #F2BDC5}
+.res .prob{font-weight:700;margin-bottom:2px}
+.res .sug{color:var(--ink-2);font-size:13.5px;margin-top:6px}
+@media (max-width:760px){
+  table.res thead{display:none}
+  table.res,table.res tbody,table.res tr,table.res td{display:block;width:100%}
+  table.res tr{border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
+  table.res td{border-bottom:0;padding:8px 14px}
+  table.res td::before{content:attr(data-h);display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+}
+.fp-list p{margin:0 0 10px;font-size:14.5px}
+.closing{background:var(--navy);color:#fff;border-radius:12px;padding:20px 24px;font-size:18px;font-weight:700;text-align:center}
 
-.band{margin-top:28px;background:var(--cyan-soft);border:1px solid #BFE7F2;border-radius:12px;padding:18px 22px;text-align:center;font-weight:700;font-size:17px;color:var(--navy)}
-
-#dudas-seccion h2{font-size:24px}
-.pie-curso{max-width:1180px;padding:18px 20px 28px;margin-top:56px}
+/* Candado */
+.lock{position:fixed;inset:0;z-index:1000;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:16px;border-top:6px solid var(--cyan)}
+.lock-box{background:var(--paper);border:1px solid var(--line);max-width:520px;width:100%;padding:36px 32px;text-align:center}
+.lock-ico{width:64px;height:64px;border-radius:50%;background:var(--cyan-soft);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.lock-box h1{font-size:28px;margin:0 0 8px;line-height:1.2}.lock-box p{color:var(--ink-2);margin:0 0 8px}
+.lock-when{font-weight:700;color:var(--navy) !important;font-size:18px;margin:14px 0 4px !important}
+.lock-left{font-size:14px;color:var(--ink-3) !important;margin-bottom:24px !important}
+.lock-box a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:8px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700}
+body.locked{overflow:hidden}
 </style>
 </head>
-<body>
+<body data-tema="Módulo 3 · Redacción y revisión contractual">
 
-<header class="hero">
-  <div class="hero-txt">
-    <p class="k">Curso · Octubre 2026</p>
-    <h1>IA generativa para profesionales del derecho</h1>
-    <p class="sub">Cómo funciona, por qué inventa y cómo usarla con criterio: secreto profesional, prompts verificables, contratos y expedientes.</p>
-    <div class="hero-chips"><span>4 módulos</span><span>4 actividades prácticas</span><span>Casos bolivianos ficticios</span></div>
-    <a class="cta" href="#actividades">Ir a las actividades <span aria-hidden="true">&darr;</span></a>
-  </div>
-  <div class="hero-img" role="img" aria-label="Abogado frente a una laptop con elementos de inteligencia artificial"></div>
-</header>
+<!-- CANDADO: bloquea la actividad hasta la fecha de ../horario.js -->
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-labelledby="lockT"><div class="lock-box">
+  <span class="lock-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+  <h1 id="lockT">Actividad 3 todavía cerrada</h1>
+  <p id="lockMsg">Verificando el horario de apertura...</p><p class="lock-when" id="lockWhen"></p><p class="lock-left" id="lockLeft"></p>
+  <a href="../">Volver a la portada del curso</a>
+</div></div>
+
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="../" aria-label="Volver a la portada del curso">&larr;</a>
+  <div class="brand">Auditoría de contrato<small>IA generativa para profesionales del derecho · Módulo 3 · Actividad 3</small></div>
+  <div class="spacer"></div>
+  <span class="pill hidden" id="whoPill"></span>
+  <span class="pill hidden" id="countPill"></span>
+  <button class="btn btn-primary hidden" id="submitBtn" type="button">Entregar</button>
+</div></header>
 
 <main>
-  <section class="blk wrap" id="actividades" aria-labelledby="rutaT">
-    <h2 id="rutaT">Ruta del curso</h2>
-    <p class="lead">Una actividad por módulo. Cada una se habilita el día de su clase. Escribe tu nombre completo al comenzar: tu nota llega directo a tu docente.</p>
-    <div class="ruta">
-      <a class="mod" href="actividad-1/" data-act="actividad-1" style="--c:#0E87A3">
-        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-        <span class="mk">Módulo 1</span>
-        <h3>Uso responsable de IA en el ejercicio jurídico</h3>
-        <div class="act"><b>Actividad 1</b><span>Anonimización antes de usar IA</span><p>Marca en un memorial los datos que debes quitar antes de subirlo a una IA.</p></div>
-        <span class="go">Empezar &rarr;</span>
-      </a>
-      <a class="mod" href="actividad-2/" data-act="actividad-2" style="--c:#0B2747">
-        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8 10h8M8 14h5"/></svg></span>
-        <span class="mk">Módulo 2</span>
-        <h3>Ingeniería de prompts jurídicos</h3>
-        <div class="act"><b>Actividad 2</b><span>Buen prompt o mal prompt</span><p>Arrastra 12 prompts a su casilla y descubre qué los hace buenos o riesgosos.</p></div>
-        <span class="go">Empezar &rarr;</span>
-      </a>
-      <a class="mod" href="actividad-3/" data-act="actividad-3" style="--c:#B5680F">
-        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        <span class="mk">Módulo 3</span>
-        <h3>Redacción y revisión contractual</h3>
-        <div class="act"><b>Actividad 3</b><span>Auditoría de contrato</span><p>Encuentra cláusulas desbalanceadas, vacíos y contradicciones antes de firmar.</p></div>
-        <span class="go">Empezar &rarr;</span>
-      </a>
-      <a class="mod" href="actividad-4/" data-act="actividad-4" style="--c:#C23A4D">
-        <span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="2.5"/><path d="M14 15l2 2"/></svg></span>
-        <span class="mk">Módulo 4</span>
-        <h3>Análisis de expedientes y documentación voluminosa</h3>
-        <div class="act"><b>Actividad 4</b><span>¿Lo dice el expediente?</span><p>Verifica un resumen hecho por IA contra el expediente real.</p></div>
-        <span class="go">Empezar &rarr;</span>
-      </a>
-    </div>
-    <p class="band">Criterio transversal: la IA puede asistir, pero no sustituye la fuente oficial ni la revisión jurídica.</p>
+  <!-- INICIO -->
+  <section id="scrStart" class="intro">
+    <div class="kicker">Módulo 3 · Actividad 3</div>
+    <h1>Auditoría de contrato</h1>
+    <p class="subt">Encuentra cláusulas desbalanceadas, vacíos y contradicciones antes de firmar.</p>
+    <div class="role" id="roleStart"></div>
+    <ol>
+      <li>Lee el contrato completo. Es ficticio y tiene 15 cláusulas.</li>
+      <li>En cada cláusula, indica si tiene un problema para tu cliente y elige el lente: <b>desbalance</b>, <b>vacío</b> o <b>contradicción</b>.</li>
+      <li>Si es una contradicción, indica con qué otra cláusula choca.</li>
+      <li>Si quieres, escribe qué propondrías cambiar. No se califica: lo revisamos en la sesión 5.</li>
+      <li>Presiona <b>Entregar</b> para ver tu nota y la tabla de respuestas.</li>
+    </ol>
+    <div class="lenses" id="lensesStart"></div>
+    <p><b>Ojo:</b> no todas las cláusulas tienen problemas. Marcar como problema una cláusula correcta resta puntos.</p>
+    <div class="field"><label for="nameInput">Nombre completo</label><input id="nameInput" autocomplete="name" placeholder="Ej.: Ana Pérez Gutiérrez"></div>
+    <div class="err" id="nameErr" role="alert"></div>
+    <button class="btn btn-primary" id="startBtn" type="button">Comenzar actividad</button>
   </section>
 
-  <section class="blk wrap" aria-labelledby="docT">
-    <div class="doc-grid">
-      <img src="docente.jpg" alt="Sergio Alcázar" width="400" height="516">
-      <div>
-        <span class="doc-k">Tu docente</span>
-        <h3 id="docT">Sergio Alcázar</h3>
-        <p class="role">Ingeniero en Telecomunicaciones · Innovación, producto y tecnología</p>
-        <div class="facts">
-          <div class="fact"><i style="background:var(--cyan-soft);color:#0E87A3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/></svg></i>Jefe de Producto y Proyectos en Blockfinity Advisors</div>
-          <div class="fact"><i style="background:var(--orange-soft);color:var(--orange)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></i>MIT Technology Review: Innovadores Menores de 35 LATAM (2022)</div>
-          <div class="fact"><i style="background:var(--green-soft);color:var(--green)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></i>Inventor de OloTouch, con patentes en Bolivia y EE. UU.</div>
-          <div class="fact"><i style="background:var(--navy-soft);color:var(--navy)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg></i>Autor de "De la Idea al Eureka" (2024)</div>
-          <div class="fact"><i style="background:var(--red-soft);color:var(--red)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/></svg></i>Experiencia en regulación fintech y activos digitales en Bolivia</div>
-          <div class="fact"><i style="background:var(--cyan-soft);color:#0E87A3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></i>Docente universitario y jurado de NASA Space Apps La Paz</div>
-        </div>
-        <a class="li-btn" href="https://www.linkedin.com/in/sergiolo/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.1c0-1.22-.02-2.79-1.7-2.79-1.7 0-1.96 1.33-1.96 2.7V21h-4z"/></svg>Conecta conmigo en LinkedIn</a>
-      </div>
+  <!-- TRABAJO -->
+  <section id="scrWork" class="work hidden">
+    <div class="brief">
+      <div class="role" id="roleWork"></div>
+      <div class="ia-note"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Puedes usar tu IA con el método visto en clase (prompt de auditoría y segunda pasada), pero verifica cada hallazgo antes de marcarlo.</span></div>
     </div>
+    <article class="contract" aria-label="Contrato a auditar">
+      <span class="fict">DOCUMENTO FICTICIO – Material de práctica</span>
+      <h2>CONTRATO DE ARRENDAMIENTO DE LOCAL COMERCIAL</h2>
+      <p class="pre" id="pre"></p>
+      <div id="clauses"></div>
+      <p class="sign">En señal de conformidad, las partes firman el presente contrato en la ciudad de La Paz, en octubre de 2026.</p>
+    </article>
+    <div class="bottom-submit"><button class="btn btn-primary" id="submitBtn2" type="button">Entregar</button></div>
   </section>
 
-  <section class="blk wrap">
-    <div id="dudas-seccion"></div>
+  <!-- RESULTADOS -->
+  <section id="scrResult" class="hidden">
+    <div class="score-head"><div class="score" id="scoreNum"></div><div><h2 id="scoreTitle"></h2><div id="scoreMsg" style="color:var(--ink-2)"></div><div class="stats" id="stats"></div><div class="send" id="sendStatus"></div></div></div>
+    <div class="box missed-box hidden" id="missedBox"></div>
+    <div class="box"><h3>Tabla de respuestas</h3><table class="res"><thead><tr><th>Cláusula</th><th>Lente</th><th>Problema</th><th>Por qué perjudica a tu cliente</th><th>Tu resultado</th></tr></thead><tbody id="resBody"></tbody></table></div>
+    <div class="box fp-list hidden" id="fpBox"></div>
+    <div class="closing">La IA acelera la auditoría; el método y tu lectura la completan. Lo comentamos en la sesión 5, el martes 20.</div>
   </section>
 </main>
 
-<footer class="pie-curso"><span><b>IA generativa para profesionales del derecho</b> · Docente: <a href="https://www.linkedin.com/in/sergiolo/" target="_blank" rel="noopener">Sergio Alcázar en LinkedIn</a></span><span>Casos, documentos y datos ficticios con fines educativos.</span></footer>
+<footer class="pie-curso"><span><b>IA generativa para profesionales del derecho</b> · Docente: Sergio Alcázar</span><span>Contrato ficticio con fines educativos.</span></footer>
+<div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
 
-<script src="config.js"></script>
-<script src="horario.js"></script>
-<script src="dudas.js"></script>
+<script src="../config.js"></script>
+<script src="../horario.js"></script>
+<script src="../dudas.js"></script>
 <script>
+/* =====================================================================
+   ACTIVIDAD 3 · AUDITORÍA DE CONTRATO (Módulo 3)
+   Contrato ficticio, clave de respuestas y calificación.
+   ===================================================================== */
+const ACT_ID = 'actividad-3';
+const HOJA = 'Actividad 3';
+const KEY = 'curso-actividad-3-v2';
+const SHEETS_URL = (window.CURSO_CONFIG || {}).SHEETS_URL || '';
+
+const ROL = '<b>Tu cliente</b>Representas al ARRENDATARIO, Café Altura S.R.L. Su prioridad es poder salir del contrato y controlar sus costos.';
+const ROL_ICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+const LENTES = {
+  none: {n:'Sin problema',  k:'var(--green)'},
+  des:  {n:'Desbalance',    k:'var(--red)',    d:'Una parte tiene derechos o protecciones que la otra no.'},
+  vac:  {n:'Vacío',         k:'var(--orange)', d:'El contrato no regula algo que debería regular.'},
+  con:  {n:'Contradicción', k:'var(--navy)',   d:'Dos cláusulas dicen cosas incompatibles.'},
+};
+
+const PREAMBULO = 'Conste por el presente documento privado el contrato de arrendamiento de local comercial que celebran, por una parte, INVERSIONES INMOBILIARIAS CUMBRE REAL S.R.L., representada por su Gerente General, Marcelo Antonio Quiroga Vela, en adelante EL ARRENDADOR; y, por otra, CAFÉ ALTURA S.R.L., representada por su Gerente General, Daniela Ríos Mendoza, en adelante EL ARRENDATARIO, al tenor de las siguientes cláusulas:';
+
+const CLAUSULAS = [
+  {id:'c01', n:'PRIMERA', t:'Objeto', x:'EL ARRENDADOR da en arrendamiento a EL ARRENDATARIO el local comercial ubicado en la planta baja del inmueble de la Av. Ballivián N° 1240, zona Calacoto, de la ciudad de La Paz, con una superficie de 85 m², en el estado que se detalla en el Anexo A (inventario y estado del local), que forma parte del presente contrato.'},
+  {id:'c02', n:'SEGUNDA', t:'Plazo', x:'El plazo del arrendamiento es de veinticuatro (24) meses, computables a partir del 1 de noviembre de 2026.'},
+  {id:'c03', n:'TERCERA', t:'Canon', x:'EL ARRENDATARIO pagará un canon mensual de Bs 9.500 (Nueve mil quinientos 00/100 bolivianos), por mes adelantado, dentro de los primeros cinco (5) días de cada mes.'},
+  {id:'c04', n:'CUARTA', t:'Reajuste del canon', x:'EL ARRENDADOR podrá reajustar el canon en cualquier momento durante la vigencia del contrato, en el porcentaje que considere conveniente, bastando para ello una comunicación escrita con diez (10) días de anticipación.'},
+  {id:'c05', n:'QUINTA', t:'Garantía', x:'A la firma del presente contrato, EL ARRENDATARIO entrega a EL ARRENDADOR la suma de Bs 19.000 (Diecinueve mil 00/100 bolivianos) en calidad de garantía, la cual será devuelta a la conclusión del contrato.'},
+  {id:'c06', n:'SEXTA', t:'Destino del local', x:'El local será destinado exclusivamente al funcionamiento de una cafetería. EL ARRENDATARIO no podrá subarrendar ni ceder el local, total o parcialmente, sin autorización previa y escrita de EL ARRENDADOR.'},
+  {id:'c07', n:'SÉPTIMA', t:'Adecuaciones', x:'EL ARRENDATARIO podrá realizar las adecuaciones necesarias para su actividad, conforme a las especificaciones técnicas contenidas en el Anexo B, que forma parte del presente contrato.'},
+  {id:'c08', n:'OCTAVA', t:'Mantenimiento y reparaciones', x:'Todas las reparaciones que requiera el local durante la vigencia del contrato, cualquiera sea su naturaleza o causa, incluidas las estructurales, de techo, cañerías e instalaciones eléctricas principales, serán de cuenta exclusiva de EL ARRENDATARIO.'},
+  {id:'c09', n:'NOVENA', t:'Forma de pago', x:'El canon será depositado por EL ARRENDATARIO en la cuenta bancaria que designe EL ARRENDADOR, a más tardar el día veinticinco (25) de cada mes.'},
+  {id:'c10', n:'DÉCIMA', t:'Servicios y expensas', x:'Los gastos de agua, luz, gas, internet y expensas comunes del edificio serán cubiertos según corresponda.'},
+  {id:'c11', n:'DÉCIMA PRIMERA', t:'Responsabilidad', x:'EL ARRENDADOR no será responsable por ningún daño o perjuicio que sufran EL ARRENDATARIO, sus dependientes, clientes o bienes dentro del local, cualquiera sea su causa, incluso si deriva de defectos del inmueble.'},
+  {id:'c12', n:'DÉCIMA SEGUNDA', t:'Resolución anticipada', x:'EL ARRENDADOR podrá dar por concluido el contrato en cualquier momento, comunicándolo por escrito con treinta (30) días de anticipación. EL ARRENDATARIO solo podrá hacerlo con un preaviso de seis (6) meses y pagando, como penalidad, el equivalente a seis (6) cánones mensuales.'},
+  {id:'c13', n:'DÉCIMA TERCERA', t:'Devolución del local', x:'Al concluir el contrato, EL ARRENDATARIO devolverá el local en el estado en que lo recibió conforme al Anexo A, salvo el desgaste natural por el uso normal. Las partes suscribirán un acta de entrega.'},
+  {id:'c14', n:'DÉCIMA CUARTA', t:'Renovación', x:'Concluidos los treinta y seis (36) meses de vigencia del presente contrato, las partes podrán renovarlo por acuerdo escrito, en las condiciones que pacten.'},
+  {id:'c15', n:'DÉCIMA QUINTA', t:'Comunicaciones', x:'Toda comunicación entre las partes se realizará por escrito, en los domicilios señalados en este contrato o en los correos electrónicos que cada parte designe por escrito.'},
+];
+
+/* Clave: 9 problemas sembrados. Las contradicciones son pares de cláusulas. */
+const PROBLEMAS = [
+  {id:'p1', lente:'con', cl:['c02','c14'], titulo:'Duración incompatible: 24 meses contra 36 meses',
+   por:'La SEGUNDA fija 24 meses y la DÉCIMA CUARTA habla de "36 meses de vigencia". El arrendador podría sostener que tu cliente está obligado por 36 meses, justo lo contrario de su prioridad de poder salir.',
+   sug:'Unificar la duración en una sola cláusula y que la de renovación remita a ella ("concluido el plazo de la cláusula SEGUNDA...").'},
+  {id:'p2', lente:'con', cl:['c03','c09'], titulo:'Dos fechas de pago distintas: días 1 a 5 contra día 25',
+   por:'Con dos plazos, el arrendador puede considerar a tu cliente en mora desde el día 6, aunque la NOVENA le permita pagar hasta el 25. Es la base para cobrar intereses o resolver el contrato por falta de pago.',
+   sug:'Dejar un solo plazo de pago, en una sola cláusula, y eliminar el otro.'},
+  {id:'p3', lente:'des', cl:['c04'], titulo:'Reajuste del canon unilateral y sin tope',
+   por:'El arrendador puede subir el canon cuando quiera, cuanto quiera y con solo 10 días de aviso. Tu cliente pierde todo control sobre su principal costo fijo.',
+   sug:'Reajuste anual, con un tope o un índice objetivo pactado, y derecho del arrendatario a resolver sin penalidad si no lo acepta.'},
+  {id:'p4', lente:'vac', cl:['c05'], titulo:'Garantía sin plazo ni reglas de devolución',
+   por:'No dice en cuántos días se devuelve ni qué descuentos se pueden hacer. Bs 19.000 de tu cliente pueden quedar retenidos indefinidamente o absorbidos por cobros discutibles.',
+   sug:'Devolución dentro de un plazo concreto tras el acta de entrega, con descuentos solo por daños o deudas acreditados y detallados por escrito.'},
+  {id:'p5', lente:'vac', cl:['c07'], titulo:'Se remite a un Anexo B que no existe',
+   por:'El contrato solo incorpora el Anexo A. Sin el Anexo B, el arrendador podría objetar cualquier adecuación del local, o exigir que tu cliente la retire al final por no cumplir "especificaciones" que nunca se acordaron.',
+   sug:'Adjuntar y firmar el Anexo B o describir en la cláusula qué adecuaciones se autorizan y qué pasa con ellas al terminar el contrato.'},
+  {id:'p6', lente:'des', cl:['c08'], titulo:'Todas las reparaciones, incluso las estructurales, a cargo del arrendatario',
+   por:'Techo, cañerías e instalaciones eléctricas principales son del inmueble, no de la cafetería. Tu cliente asume costos imprevisibles y potencialmente muy altos sobre un bien que no es suyo.',
+   sug:'Reparaciones locativas y de uso ordinario a cargo del arrendatario; las estructurales y de instalaciones principales, a cargo del arrendador.'},
+  {id:'p7', lente:'vac', cl:['c10'], titulo:'No dice quién paga servicios y expensas',
+   por:'"Según corresponda" no asigna la obligación a nadie. Es una puerta abierta para que el arrendador traslade a tu cliente expensas extraordinarias o gastos de áreas comunes que no previó.',
+   sug:'Indicar que los servicios del local los paga el arrendatario, y precisar si las expensas ordinarias le corresponden, excluyendo expresamente las extraordinarias.'},
+  {id:'p8', lente:'des', cl:['c11'], titulo:'Exclusión total de responsabilidad del arrendador',
+   por:'El arrendador no responde por nada, ni siquiera por defectos del propio inmueble. Si un problema del edificio daña los equipos o la mercadería de tu cliente, tendría que asumirlo solo.',
+   sug:'Mantener la responsabilidad del arrendador por daños derivados de defectos del inmueble o de su falta de mantenimiento.'},
+  {id:'p9', lente:'des', cl:['c12'], titulo:'Resolución anticipada con reglas opuestas para cada parte',
+   por:'El arrendador sale con 30 días de aviso y sin costo; tu cliente necesita 6 meses de preaviso y pagar 6 cánones (Bs 57.000). Choca de frente con su prioridad de poder salir del contrato.',
+   sug:'Mismo preaviso para ambas partes (por ejemplo, 60 días) y, si hay penalidad, recíproca y razonable.'},
+];
+const CORRECTAS = {
+  c01:'El objeto está bien delimitado: ubicación, superficie y estado del local, con un Anexo A que sí forma parte del contrato.',
+  c06:'Limitar el destino y prohibir el subarriendo sin autorización es habitual y razonable; no afecta la salida ni los costos de tu cliente.',
+  c13:'Exigir devolver el local como se recibió, salvo el desgaste normal, y con acta de entrega, es equilibrado y protege también a tu cliente.',
+  c15:'Prever comunicaciones escritas a domicilios y correos designados es correcto y da seguridad a ambas partes.',
+};
+const PTS_ENCONTRADO = 2, PTS_LENTE = 1, PTS_MARCA_DE_MAS = 2;
+
+/* ============ Utilidades y estado ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CL = Object.fromEntries(CLAUSULAS.map(c => [c.id, c]));
+const nombreCl = id => CL[id].n;
+let state = {name:'', started:0, a:{}, submitted:null, attempts:0};
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s && typeof s==='object') state = Object.assign(state, s); }catch(e){}
+
+/* ============ Candado ============ */
 (function(){
-  if(!window.CursoHorario) return;
-  const LOCK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-  const cards=[...document.querySelectorAll('a.mod[data-act]')];
-  cards.forEach(a=>{ a.dataset.href=a.getAttribute('href'); a.addEventListener('click',e=>{ if(a.classList.contains('is-locked')) e.preventDefault(); }); });
-  function pintar(){
-    cards.forEach(a=>{
-      const id=a.dataset.act, locked=CursoHorario.bloqueada(id);
-      a.classList.toggle('is-locked',locked);
-      let info=a.querySelector('.lockinfo');
-      if(locked){
-        a.setAttribute('aria-disabled','true'); a.removeAttribute('href');
-        if(!info){ info=document.createElement('span'); info.className='lockinfo'; a.querySelector('.act').appendChild(info); }
-        info.innerHTML=LOCK+'<span>Se habilita el '+CursoHorario.textoApertura(id)+' · faltan '+CursoHorario.faltan(id)+'</span>';
-        a.querySelector('.go').textContent='Bloqueada';
-      } else {
-        a.removeAttribute('aria-disabled'); a.setAttribute('href',a.dataset.href);
-        if(info) info.remove(); a.querySelector('.go').innerHTML='Empezar &rarr;';
-      }
-    });
-  }
-  CursoHorario.sincronizar().then(()=>{ pintar(); setInterval(pintar,30000); });
+  document.body.classList.add('locked');
+  const lock = $('lock');
+  function abrir(){ lock.remove(); document.body.classList.remove('locked'); }
+  if(!window.CursoHorario){ abrir(); return; }
+  CursoHorario.sincronizar().then(function revisar(){
+    if(!CursoHorario.bloqueada(ACT_ID)){ abrir(); return; }
+    $('lockMsg').textContent = 'Esta actividad se habilita el';
+    $('lockWhen').textContent = CursoHorario.textoApertura(ACT_ID);
+    $('lockLeft').textContent = 'Faltan ' + CursoHorario.faltan(ACT_ID) + '. La página se abrirá sola cuando llegue la hora.';
+    setTimeout(revisar, 30000);
+  });
 })();
+
+/* ============ Inicio ============ */
+$('roleStart').innerHTML = ROL_ICON + '<span>' + ROL + '</span>';
+$('roleWork').innerHTML = ROL_ICON + '<span>' + ROL + '</span>';
+$('lensesStart').innerHTML = ['des','vac','con'].map(k => '<div style="background:'+({des:'var(--red-soft)',vac:'var(--orange-soft)',con:'var(--navy-soft)'}[k])+'"><b style="color:'+LENTES[k].k+'">'+LENTES[k].n+'</b>'+LENTES[k].d+'</div>').join('');
+$('pre').textContent = PREAMBULO;
+
+/* ============ Contrato y respuestas ============ */
+function renderClauses(){
+  const box = $('clauses'); box.innerHTML = '';
+  CLAUSULAS.forEach(c => {
+    const a = state.a[c.id] || {};
+    const el = document.createElement('section'); el.className = 'cl'; el.id = 'cl-' + c.id;
+    el.innerHTML = `<h3>${esc(c.n)}. (${esc(c.t)})</h3><p class="txt">${esc(c.x)}</p>
+      <fieldset><legend>¿Tiene un problema para tu cliente?</legend><div class="opts">${Object.keys(LENTES).map(k =>
+        `<label class="opt" style="--k:${LENTES[k].k}"><input type="radio" name="${c.id}" value="${k}"${(a.lens||'')===k?' checked':''}><span>${LENTES[k].n}</span></label>`).join('')}</div></fieldset>
+      <div class="extra hidden">
+        <div class="withWrap hidden"><label for="w-${c.id}">¿Con qué cláusula choca?</label>
+          <select id="w-${c.id}"><option value="">Elige la cláusula</option>${CLAUSULAS.filter(o=>o.id!==c.id).map(o=>`<option value="${o.id}"${a.with===o.id?' selected':''}>${esc(o.n)} · ${esc(o.t)}</option>`).join('')}</select></div>
+        <div><label for="p-${c.id}">¿Qué propondrías cambiar? <span class="opc">(opcional, no se califica)</span></label>
+          <textarea id="p-${c.id}" maxlength="400">${esc(a.prop||'')}</textarea></div>
+      </div>`;
+    const sync = () => {
+      const cur = state.a[c.id] || {};
+      const isProb = cur.lens && cur.lens !== 'none';
+      el.classList.toggle('marked', !!isProb);
+      el.style.setProperty('--c', isProb ? LENTES[cur.lens].k : '');
+      el.querySelector('.extra').classList.toggle('hidden', !isProb);
+      el.querySelector('.withWrap').classList.toggle('hidden', cur.lens !== 'con');
+    };
+    el.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', () => {
+      state.a[c.id] = Object.assign(state.a[c.id] || {}, {lens: r.value});
+      if(r.value !== 'con') delete state.a[c.id].with;
+      save(); sync(); count();
+    }));
+    el.querySelector('select').addEventListener('change', e => { state.a[c.id] = Object.assign(state.a[c.id]||{}, {with:e.target.value}); save(); });
+    el.querySelector('textarea').addEventListener('input', e => { state.a[c.id] = Object.assign(state.a[c.id]||{}, {prop:e.target.value}); save(); });
+    box.appendChild(el); sync();
+  });
+  count();
+}
+const marcadas = () => CLAUSULAS.filter(c => state.a[c.id] && state.a[c.id].lens && state.a[c.id].lens !== 'none');
+function count(){ const n = marcadas().length; $('countPill').textContent = n + (n===1?' cláusula marcada':' cláusulas marcadas'); }
+
+/* ============ Calificación ============ */
+function grade(){
+  const ans = id => state.a[id] || {};
+  const isProb = id => { const l = ans(id).lens; return !!l && l !== 'none'; };
+  let pts = 0; const max = PROBLEMAS.length * (PTS_ENCONTRADO + PTS_LENTE);
+  const res = PROBLEMAS.map(p => {
+    let found, lensOK, marcado = [];
+    if(p.lente === 'con'){
+      const [x, y] = p.cl;
+      found = isProb(x) || isProb(y);
+      lensOK = (ans(x).lens === 'con' && ans(x).with === y) || (ans(y).lens === 'con' && ans(y).with === x);
+      p.cl.forEach(id => { if(isProb(id)) marcado.push(ans(id)); });
+    } else {
+      found = isProb(p.cl[0]); lensOK = ans(p.cl[0]).lens === p.lente;
+      if(found) marcado.push(ans(p.cl[0]));
+    }
+    if(found) pts += PTS_ENCONTRADO;
+    if(lensOK) pts += PTS_LENTE;
+    return {p, found, lensOK, marcado};
+  });
+  const fp = Object.keys(CORRECTAS).filter(isProb);
+  const pen = fp.length * PTS_MARCA_DE_MAS;
+  const score = Math.max(0, Math.round((pts - pen) / max * 100));
+  return {res, fp, pts, pen, max, score, found: res.filter(r=>r.found).length, lensOK: res.filter(r=>r.lensOK).length};
+}
+
+/* ============ Resultados ============ */
+function lensTag(k){ return `<span class="lens-tag" style="background:${LENTES[k].k}">${LENTES[k].n}</span>`; }
+function showResults(g){
+  ['scrStart','scrWork','submitBtn','countPill'].forEach(id => $(id).classList.add('hidden'));
+  $('scrResult').classList.remove('hidden');
+  $('whoPill').textContent = state.name; $('whoPill').classList.remove('hidden');
+  const first = state.name.split(' ')[0];
+  $('scoreNum').innerHTML = g.score + '<small>/100</small>';
+  $('scoreTitle').textContent = g.score >= 85 ? 'Excelente auditoría, ' + first : g.score >= 60 ? 'Buen trabajo, ' + first + ', pero se te pasaron riesgos' : 'Este contrato todavía no está listo para firmar, ' + first;
+  $('scoreMsg').textContent = 'Encontraste ' + g.found + ' de ' + PROBLEMAS.length + ' problemas y acertaste el lente en ' + g.lensOK + '. ' + (g.fp.length ? 'Se restaron puntos por marcar ' + g.fp.length + (g.fp.length===1?' cláusula correcta':' cláusulas correctas') + ' como problema.' : 'No marcaste ninguna cláusula correcta como problema.');
+  $('stats').innerHTML = [['Problemas encontrados', g.found+'/'+PROBLEMAS.length, 'green'], ['Lente correcto', g.lensOK+'/'+PROBLEMAS.length, 'navy'], ['No encontrados', PROBLEMAS.length-g.found, 'red'], ['Marcas de más', g.fp.length, 'orange']]
+    .map(([l,v,c]) => `<div class="stat" style="background:var(--${c}-soft);color:var(--${c})"><b>${v}</b>${l}</div>`).join('');
+
+  const missed = g.res.filter(r => !r.found);
+  if(missed.length){
+    $('missedBox').classList.remove('hidden');
+    $('missedBox').innerHTML = '<h3>Problemas que no encontraste</h3><ul>' + missed.map(r => `<li><b>${esc(r.p.cl.map(nombreCl).join(' y '))}:</b> ${esc(r.p.titulo)}</li>`).join('') + '</ul>';
+  }
+  const order = r => r.found ? (r.lensOK ? 2 : 1) : 0;
+  $('resBody').innerHTML = [...g.res].sort((a,b) => order(a) - order(b)).map(r => {
+    let st;
+    if(!r.found) st = '<span class="st no">No lo encontraste</span>';
+    else if(r.lensOK) st = '<span class="st ok">Encontrado, lente correcto</span>';
+    else {
+      const m = r.marcado[0] || {};
+      const detalle = m.lens === 'con' && r.p.lente === 'con' ? 'elegiste otra cláusula' : 'marcaste ' + (LENTES[m.lens] ? LENTES[m.lens].n.toLowerCase() : 'otro lente');
+      st = '<span class="st half">Encontrado, pero ' + esc(detalle) + '</span>';
+    }
+    return `<tr class="${r.found?'':'miss'}">
+      <td data-h="Cláusula"><b>${esc(r.p.cl.map(nombreCl).join(' y '))}</b></td>
+      <td data-h="Lente">${lensTag(r.p.lente)}</td>
+      <td data-h="Problema"><div class="prob">${esc(r.p.titulo)}</div><div class="sug">Propuesta: ${esc(r.p.sug)}</div></td>
+      <td data-h="Por qué perjudica a tu cliente">${esc(r.p.por)}</td>
+      <td data-h="Tu resultado">${st}</td></tr>`;
+  }).join('');
+  if(g.fp.length){
+    $('fpBox').classList.remove('hidden');
+    $('fpBox').innerHTML = '<h3>Cláusulas correctas que marcaste como problema</h3>' + g.fp.map(id => `<p><b>${esc(nombreCl(id))} (${esc(CL[id].t)}):</b> ${esc(CORRECTAS[id])} <span style="color:var(--red);font-weight:700">(−${PTS_MARCA_DE_MAS} puntos)</span></p>`).join('');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============ Envío a Google Sheets ============ */
+async function send(g){
+  const st = $('sendStatus');
+  if(!SHEETS_URL){ st.textContent = 'Registro de notas no configurado: muestra esta pantalla a tu docente.'; return; }
+  st.textContent = 'Enviando tu resultado al docente...';
+  const propuestas = CLAUSULAS.filter(c => state.a[c.id] && state.a[c.id].prop && state.a[c.id].prop.trim() && state.a[c.id].lens !== 'none')
+    .map(c => c.n + ': ' + state.a[c.id].prop.trim()).join(' | ');
+  const respuestas = marcadas().map(c => { const a = state.a[c.id]; return c.n + '=' + LENTES[a.lens].n + (a.lens==='con' && a.with ? ' con ' + nombreCl(a.with) : ''); }).join(' | ');
+  try{
+    await fetch(SHEETS_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({hoja: HOJA, datos: {
+      'Nombre': state.name, 'Nota (/100)': g.score, 'Intento': state.attempts,
+      'Minutos': Math.round((Date.now() - state.started) / 60000),
+      'Problemas encontrados': g.found, 'Lente correcto': g.lensOK, 'Total de problemas': PROBLEMAS.length,
+      'Marcas de más': g.fp.length,
+      'No encontrados': g.res.filter(r => !r.found).map(r => r.p.cl.map(nombreCl).join(' y ')).join(' | '),
+      'Respuestas': respuestas,
+      'Propuestas de cambio': propuestas,
+      'Navegador': navigator.userAgent.slice(0, 120)
+    }})});
+    st.className = 'send ok'; st.textContent = 'Resultado enviado al docente.';
+  }catch(e){ st.className = 'send bad'; st.textContent = 'No se pudo enviar el resultado. Toma una captura de esta pantalla y envíala a tu docente.'; }
+}
+
+/* ============ Modal ============ */
+function modal(title, text, actions){
+  $('modalT').textContent = title; $('modalP').textContent = text; const a = $('modalA'); a.innerHTML = '';
+  actions.forEach(([l, p, fn]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (p ? ' btn-primary' : ''); b.textContent = l; b.onclick = () => { $('modal').classList.add('hidden'); fn && fn(); }; a.appendChild(b); });
+  $('modal').classList.remove('hidden'); a.lastChild.focus();
+}
+
+/* ============ Flujo ============ */
+if(state.name) $('nameInput').value = state.name;
+$('startBtn').onclick = () => {
+  const n = $('nameInput').value.trim().replace(/\s+/g, ' ');
+  if(n.split(' ').length < 2){ $('nameErr').textContent = 'Escribe tu nombre y al menos un apellido, para que tu docente pueda identificar tu entrega.'; $('nameInput').focus(); return; }
+  if(state.name !== n){ state.a = {}; state.submitted = null; }
+  state.name = n; state.started = state.started || Date.now(); save();
+  $('scrStart').classList.add('hidden'); $('scrWork').classList.remove('hidden');
+  $('whoPill').textContent = n; ['whoPill','countPill','submitBtn'].forEach(id => $(id).classList.remove('hidden'));
+  renderClauses(); window.scrollTo(0, 0);
+};
+$('nameInput').addEventListener('keydown', e => { if(e.key === 'Enter') $('startBtn').click(); });
+function entregar(){
+  const sinPareja = marcadas().filter(c => state.a[c.id].lens === 'con' && !state.a[c.id].with);
+  if(sinPareja.length){
+    modal('Falta indicar una cláusula', 'Marcaste una contradicción en la cláusula ' + sinPareja[0].n + ' pero no indicaste con qué otra cláusula choca.', [['Ir a la cláusula', true, () => $('cl-' + sinPareja[0].id).scrollIntoView({behavior:'smooth', block:'center'})]]);
+    return;
+  }
+  const n = marcadas().length;
+  modal('¿Entregar la auditoría?', 'Marcaste ' + n + (n===1?' cláusula':' cláusulas') + ' con problemas. Las que no marcaste se consideran sin problema. Después de entregar ya no podrás cambiar tus respuestas.', [
+    ['Seguir revisando', false],
+    ['Entregar', true, () => { state.attempts = (state.attempts || 0) + 1; const g = grade(); state.submitted = {score: g.score}; save(); showResults(g); send(g); }]
+  ]);
+}
+$('submitBtn').onclick = entregar; $('submitBtn2').onclick = entregar;
+if(state.name && state.submitted){ showResults(grade()); $('sendStatus').textContent = 'Esta actividad ya fue entregada desde este navegador.'; }
 </script>
+<script src="../materiales.js"></script>
 </body>
 </html>
