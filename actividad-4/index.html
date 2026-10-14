@@ -5,96 +5,356 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>¿Lo dice el expediente? · Actividad 4</title>
 <link rel="stylesheet" href="../tema.css">
+<style>
+*{box-sizing:border-box}
+body{color:var(--ink);line-height:1.5}
+button,input,select,textarea{font:inherit}
+.hidden{display:none !important}
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:18px}
+.brand{font-weight:700;font-size:15px}.brand small{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+.spacer{flex:1}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--ink-2);background:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:10px 18px;font-weight:700;min-height:44px;cursor:pointer}
+.btn-primary{color:#fff}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 40px}
+
+/* Inicio */
+.intro{max-width:780px;margin:24px auto;background:var(--paper);border:1px solid var(--line);padding:36px}
+@media (max-width:600px){.intro{padding:24px 18px}}
+.kicker{font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.intro h1{font-size:34px;margin:8px 0 6px;line-height:1.15}
+.intro .subt{font-size:18px;color:var(--ink-2);margin:0 0 18px}
+.intro p,.intro li{color:var(--ink-2)}
+.field{display:flex;flex-direction:column;gap:6px;margin:20px 0 8px}
+.field label{font-weight:700;font-size:14px}
+.field input{padding:12px 14px;border:1px solid var(--line);border-radius:8px;min-height:44px}
+.field input:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.err{color:var(--red);font-size:14px;min-height:20px}
+
+/* Consigna y descarga */
+.consigna{background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;font-size:16px;line-height:1.6;margin:0 0 16px}
+.consigna b{color:#5FD3EC}
+.opts-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 16px}
+@media (max-width:640px){.opts-legend{grid-template-columns:1fr}}
+.opts-legend div{border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink-2)}
+.opts-legend b{display:block;font-size:15px}
+.dl{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:12px 20px;border-radius:10px;background:var(--cyan);color:var(--navy) !important;text-decoration:none;font-weight:900;font-size:16px}
+.dl:hover{background:#3FC9E4}
+.dl small{display:block;font-weight:400;font-size:12px}
+.dl-note{font-size:13px;color:var(--red);margin:6px 0 0}
+
+/* Trabajo */
+.work{max-width:900px;margin:0 auto}
+.work-head{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.items{display:flex;flex-direction:column;gap:14px}
+.it{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:16px 18px}
+.it.done{border-left-color:var(--cyan)}
+.it .num{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.it .t{font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.55;margin:0 0 12px;color:#1a2533}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.it fieldset{border:0;padding:0;margin:0}
+.it legend{font-size:13px;font-weight:700;color:var(--ink-3);margin-bottom:6px;padding:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt span{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;user-select:none;color:var(--k)}
+.opt span::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid currentColor;opacity:.55}
+.opt input:checked + span{background:var(--k);border-color:var(--k);color:#fff}
+.opt input:checked + span::before{background:#fff;border-color:#fff;opacity:1}
+.opt input:focus-visible + span{outline:3px solid var(--cyan);outline-offset:2px}
+.foja label{display:block;font-size:13px;font-weight:700;color:var(--ink-3);margin-bottom:6px}
+.foja input[type=text]{width:110px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:42px;font-size:16px}
+.foja input[type=text]:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.foja input[type=text]:disabled{background:var(--ground);color:var(--ink-3)}
+.na{display:inline-flex;align-items:center;gap:8px;margin-left:10px;font-size:14px;font-weight:700;color:var(--ink-2);cursor:pointer;min-height:42px}
+.na input{width:20px;height:20px;accent-color:var(--navy)}
+.open{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:18px}
+.open label{display:block;font-weight:700;margin-bottom:4px}
+.open .sub{font-size:13px;color:var(--ink-3);margin:0 0 8px}
+.open textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical}
+.open textarea:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.counter{font-size:12px;color:var(--ink-3);text-align:right;margin-top:4px}
+.bottom-submit{display:flex;justify-content:flex-end;margin-top:18px}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(11,39,71,.5);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--paper);max-width:460px;width:100%;padding:24px}
+.modal h3{margin:0 0 8px}.modal p{color:var(--ink-2);margin:0 0 18px}
+.modal .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+/* Resultados */
+.score-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:24px 28px;margin-bottom:20px}
+@media (max-width:700px){.score-head{grid-template-columns:1fr}}
+.score{font-size:72px;line-height:1}.score small{font-size:24px;color:var(--ink-3)}
+.score-head h2{margin:0 0 4px;font-size:22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700}.stat b{font-size:18px;display:block}
+.send{font-size:13px;color:var(--ink-3);margin-top:10px}.send.ok{color:var(--green)}.send.bad{color:var(--red)}
+.closing{background:var(--navy);color:#fff;border-radius:12px;padding:20px 24px;font-size:18px;font-weight:700;text-align:center}
+
+/* Candado */
+.lock{position:fixed;inset:0;z-index:1000;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:16px;border-top:6px solid var(--cyan)}
+.lock-box{background:var(--paper);border:1px solid var(--line);max-width:520px;width:100%;padding:36px 32px;text-align:center}
+.lock-ico{width:64px;height:64px;border-radius:50%;background:var(--cyan-soft);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.lock-box h1{font-size:28px;margin:0 0 8px;line-height:1.2}.lock-box p{color:var(--ink-2);margin:0 0 8px}
+.lock-when{font-weight:700;color:var(--navy) !important;font-size:18px;margin:14px 0 4px !important}
+.lock-left{font-size:14px;color:var(--ink-3) !important;margin-bottom:24px !important}
+.lock-box a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:8px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700}
+body.locked{overflow:hidden}
+</style>
 </head>
 <body data-tema="Módulo 4 · Análisis de expedientes">
+
+<!-- CANDADO: bloquea la actividad hasta la fecha de ../horario.js -->
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-labelledby="lockT"><div class="lock-box">
+  <span class="lock-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+  <h1 id="lockT">Actividad 4 todavía cerrada</h1>
+  <p id="lockMsg">Verificando el horario de apertura...</p><p class="lock-when" id="lockWhen"></p><p class="lock-left" id="lockLeft"></p>
+  <a href="../">Volver a la portada del curso</a>
+</div></div>
+
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="../" aria-label="Volver a la portada del curso">&larr;</a>
+  <div class="brand">¿Lo dice el expediente?<small>IA generativa para profesionales del derecho · Módulo 4 · Actividad 4</small></div>
+  <div class="spacer"></div>
+  <span class="pill hidden" id="whoPill"></span>
+  <span class="pill hidden" id="countPill"></span>
+  <button class="btn btn-primary hidden" id="submitBtn" type="button">Entregar</button>
+</div></header>
+
+<main>
+  <!-- INICIO -->
+  <section id="scrStart" class="intro">
+    <div class="kicker">Módulo 4 · Actividad 4</div>
+    <h1>¿Lo dice el expediente?</h1>
+    <p class="subt">Análisis de expedientes y documentación voluminosa</p>
+    <p class="consigna" id="consignaStart"></p>
+    <p>Necesitarás el expediente para verificar cada afirmación. Puedes descargarlo ahora o dentro de la actividad.</p>
+    <p><a class="dl" id="dlStart" href="#" download><span id="dlIco1"></span><span>Descargar expediente<small>Documento Word · Choque Rojas c/ Panificadora El Trigal S.R.L.</small></span></a></p>
+    <p class="dl-note hidden" id="dlNote1">El expediente todavía no está disponible. Avísale a tu docente.</p>
+    <div class="field"><label for="nameInput">Nombre completo</label><input id="nameInput" autocomplete="name" placeholder="Ej.: Ana Pérez Gutiérrez"></div>
+    <div class="err" id="nameErr" role="alert"></div>
+    <button class="btn btn-primary" id="startBtn" type="button">Comenzar actividad</button>
+  </section>
+
+  <!-- TRABAJO -->
+  <section id="scrWork" class="work hidden">
+    <div class="work-head">
+      <p class="consigna" id="consignaWork"></p>
+      <div class="opts-legend" id="legend"></div>
+      <a class="dl" id="dlWork" href="#" download><span id="dlIco2"></span><span>Descargar expediente<small>Documento Word · Choque Rojas c/ Panificadora El Trigal S.R.L.</small></span></a>
+      <p class="dl-note hidden" id="dlNote2">El expediente todavía no está disponible. Avísale a tu docente.</p>
+    </div>
+    <div class="items" id="items"></div>
+    <div class="open">
+      <label for="openQ">¿Qué afirmación te costó más verificar y por qué?</label>
+      <p class="sub">Esta pregunta no tiene nota. La comentamos en la sesión 5.</p>
+      <textarea id="openQ" maxlength="500"></textarea>
+      <div class="counter" id="openCount">0 / 500</div>
+    </div>
+    <div class="bottom-submit"><button class="btn btn-primary" id="submitBtn2" type="button">Entregar</button></div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="scrResult" class="hidden">
+    <div class="score-head"><div class="score" id="scoreNum"></div><div><h2 id="scoreTitle"></h2><div id="scoreMsg" style="color:var(--ink-2)"></div><div class="stats" id="stats"></div><div class="send" id="sendStatus"></div></div></div>
+    <div class="closing">Las respuestas correctas las revisamos juntos en la sesión 5, el martes 20 de octubre. Guarda tus notas sobre las fojas que consultaste.</div>
+  </section>
+</main>
+
+<footer class="pie-curso"><span><b>IA generativa para profesionales del derecho</b> · Docente: Sergio Alcázar</span><span>Expediente ficticio con fines educativos.</span></footer>
+<div class="modal-bg hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalT"><h3 id="modalT"></h3><p id="modalP"></p><div class="acts" id="modalA"></div></div></div>
+
 <script src="../config.js"></script>
 <script src="../horario.js"></script>
 <script src="../dudas.js"></script>
 <script>
 /* =====================================================================
-   ACTIVIDAD 4 · ¿Lo dice el expediente o lo inventó la IA? (Módulo 4)
-   ok = respuestas aceptadas · e = explicación · s = qué hacer
+   ACTIVIDAD 4 · ¿LO DICE EL EXPEDIENTE? (Módulo 4)
+   La corrección se hace en el navegador, igual que en las actividades
+   1, 2 y 3. La clave va codificada (no a simple vista) y no se muestra
+   en pantalla: las respuestas se revisan en la sesión 5.
    ===================================================================== */
-window.ACT = {
-  id: 'actividad-4',
-  hoja: 'Actividad 4 · Expediente',
-  actividad: 'Módulo 4 · Actividad 4',
-  corto: 'Actividad 4',
-  titulo: '¿Lo dice el expediente?',
-  pregunta: '¿Lo dice el expediente o lo inventó la IA?',
-  intro: '<p>Un colega le pidió a una IA que resumiera un expediente laboral y te mandó el resumen para que lo uses en una audiencia. Antes de usarlo, compara cada afirmación con los extractos del expediente. La IA escribe con la misma seguridad cuando acierta que cuando se equivoca.</p>',
-  pasos: [
-    'A la izquierda tienes los extractos del expediente (ficticio y ya anonimizado). Esa es tu única fuente.',
-    'A la derecha está el resumen de la IA, dividido en 12 afirmaciones.',
-    'Clasifica cada una: <b>Correcta</b>, <b>Contradice el expediente</b> o <b>No está en el expediente</b>.',
-    'Al entregar verás qué documento la confirma o la desmiente.'
-  ],
-  opciones: [
-    {k:'ok',  label:'Correcta',                  c:'green',  desc:'El expediente la respalda tal cual'},
-    {k:'con', label:'Contradice el expediente',  c:'red',    desc:'El expediente dice otra cosa'},
-    {k:'inv', label:'No está en el expediente',  c:'orange', desc:'Ningún documento la menciona: posible invención'},
-  ],
-  contexto: {
-    titulo: 'Extractos del expediente',
-    sub: 'Proceso laboral por pago de beneficios sociales. Documento ficticio.',
-    html: `
-      <div class="doc"><h3>Doc. 1 · Contrato de trabajo</h3><p>[EMPRESA B] contrata a [TRABAJADORA A] como Analista de Créditos, a partir del 2 de mayo de 2019, por tiempo indefinido, con un haber mensual de Bs 7.200.</p></div>
-      <div class="doc"><h3>Doc. 2 · Memorándum de 14 de marzo de 2026</h3><p>"Por medio del presente se le comunica que, debido a la reestructuración del área de créditos, se prescinde de sus servicios a partir del 15 de marzo de 2026."</p></div>
-      <div class="doc"><h3>Doc. 3 · Demanda (presentada el 22 de abril de 2026)</h3><p>Ante el Juzgado 2.° de Trabajo y Seguridad Social de La Paz, [TRABAJADORA A] demanda el pago de indemnización por tiempo de servicios, desahucio, aguinaldo proporcional y quince (15) días de vacaciones no gozadas.</p></div>
-      <div class="doc"><h3>Doc. 4 · Contestación (presentada el 20 de mayo de 2026)</h3><p>[EMPRESA B] niega adeudar beneficios y sostiene que la trabajadora abandonó su fuente laboral desde el 10 de marzo de 2026. Adjunta planillas de asistencia.</p></div>
-      <div class="doc"><h3>Doc. 5 · Acta de audiencia de 18 de junio de 2026</h3><p>[TESTIGO 1], compañera de área, declara que [TRABAJADORA A] asistió normalmente a trabajar hasta el 14 de marzo de 2026, día en que recibió el memorándum.</p></div>`
-  },
-  itemsTitulo: 'Resumen generado por la IA',
-  sugLabel: 'Qué hacer',
-  resultadoTip: 'Una sola afirmación falsa en un memorial basta para perder credibilidad ante el juez: verifica siempre contra el expediente.',
-  items: [
-    {id:'a01', ref:'Afirmación 1', ok:['ok'],
-     text:'La trabajadora ingresó a la empresa el 2 de mayo de 2019 como Analista de Créditos.',
-     e:'Coincide con el contrato de trabajo (Doc. 1).'},
-    {id:'a02', ref:'Afirmación 2', ok:['ok'],
-     text:'Su haber mensual era de Bs 7.200.',
-     e:'Coincide con el contrato de trabajo (Doc. 1).'},
-    {id:'a03', ref:'Afirmación 3', ok:['con'],
-     text:'Fue despedida mediante memorándum de 14 de febrero de 2026.',
-     e:'El memorándum es del 14 de marzo de 2026 (Doc. 2). Un error de un mes en la fecha cambia el cálculo de beneficios y de plazos: es el tipo de error que la IA comete con total seguridad.',
-     s:'Corregir la fecha y, como regla, verificar cada fecha del resumen contra el documento original antes de usarla.'},
-    {id:'a04', ref:'Afirmación 4', ok:['con'],
-     text:'La empresa sostuvo en todo momento que la causa del despido fue la reestructuración del área.',
-     e:'El memorándum habla de reestructuración (Doc. 2), pero en la contestación la empresa alega abandono de trabajo (Doc. 4). Esa contradicción de la contraparte es justamente el mejor argumento del caso, y el resumen de la IA la borró.',
-     s:'Pedirle a la IA, de forma expresa, que identifique contradicciones entre los documentos de la contraparte, citando el documento de cada versión.'},
-    {id:'a05', ref:'Afirmación 5', ok:['ok'],
-     text:'La demanda se presentó el 22 de abril de 2026 ante el Juzgado 2.° de Trabajo y Seguridad Social de La Paz.',
-     e:'Coincide con la demanda (Doc. 3).'},
-    {id:'a06', ref:'Afirmación 6', ok:['inv'],
-     text:'Además de los beneficios sociales, la trabajadora reclama Bs 50.000 por daño moral.',
-     e:'Ningún documento menciona daño moral. La IA "completó" la demanda con un reclamo habitual en otros casos. Si lo repites en audiencia, estás afirmando algo que tu propia demanda no dice.',
-     s:'Eliminarla. Pedir a la IA que indique, para cada afirmación, el documento y el párrafo de donde la saca.'},
-    {id:'a07', ref:'Afirmación 7', ok:['con'],
-     text:'Se reclaman treinta (30) días de vacaciones no gozadas.',
-     e:'La demanda reclama quince (15) días (Doc. 3). Un error en una cifra se arrastra a la liquidación.',
-     s:'Corregir la cifra y revisar uno por uno los montos y cantidades del resumen.'},
-    {id:'a08', ref:'Afirmación 8', ok:['ok'],
-     text:'La contestación a la demanda se presentó el 20 de mayo de 2026.',
-     e:'Coincide con la contestación (Doc. 4).'},
-    {id:'a09', ref:'Afirmación 9', ok:['inv'],
-     text:'En su contestación, la empresa reconoció que adeuda el aguinaldo proporcional.',
-     e:'La contestación niega adeudar beneficios (Doc. 4). No hay ningún reconocimiento. Es una invención que favorece a nuestra clienta: por eso es tan peligrosa, porque uno tiende a creer lo que le conviene.',
-     s:'Eliminarla. Si el reconocimiento existiera, tendría que estar en un documento concreto que puedas citar.'},
-    {id:'a10', ref:'Afirmación 10', ok:['ok'],
-     text:'En audiencia, una testigo declaró que la trabajadora asistió a trabajar hasta el 14 de marzo de 2026.',
-     e:'Coincide con el acta de audiencia (Doc. 5), y desmiente la tesis de abandono desde el 10 de marzo.'},
-    {id:'a11', ref:'Afirmación 11', ok:['con'],
-     text:'Al momento del despido, la trabajadora tenía más de ocho años de antigüedad.',
-     e:'Del 2 de mayo de 2019 al 15 de marzo de 2026 hay menos de siete años (Doc. 1 y 2). La IA no calcula: genera texto probable. Los cálculos se hacen y se verifican por separado.',
-     s:'Calcular la antigüedad por fuera de la IA (o pedirle el cálculo paso a paso) y verificarlo con las fechas de los documentos.'},
-    {id:'a12', ref:'Afirmación 12', ok:['inv'],
-     text:'Según el Auto Supremo N.° 412/2019 de la Sala Social del Tribunal Supremo de Justicia, la reestructuración no justifica el despido sin pago de beneficios sociales.',
-     e:'Ningún documento del expediente cita esa resolución, y el resumen no dice de dónde la sacó. Puede no existir o no decir eso. Es el error de Mata v. Avianca: citar jurisprudencia que nadie verificó.',
-     s:'No usarla hasta localizarla en la fuente oficial del Tribunal Supremo y leer el texto completo. Preguntarle a la IA si existe no es verificar.'},
-  ]
+const ACT_ID = 'actividad-4';
+const HOJA = 'Actividad 4';
+const KEY = 'curso-actividad-4-v2';
+const SHEETS_URL = (window.CURSO_CONFIG || {}).SHEETS_URL || '';
+const EXPEDIENTE = '../materiales/Expediente_ficticio_laboral_Choque_c_El_Trigal.docx';
+
+const CONSIGNA = 'Un colega le pidió a una IA que resumiera el expediente <b>Choque Rojas c/ Panificadora El Trigal S.R.L.</b> Antes de usar ese resumen, tu trabajo es verificarlo. Para cada afirmación, indica si es <b>CIERTA</b> (lo dice el expediente), <b>INCORRECTA</b> (el expediente dice otra cosa) o <b>NO CONSTA</b> (no está en el expediente: la IA lo inventó). Luego escribe el número de foja donde lo verificaste.';
+
+const OPCIONES = {
+  c: {n:'Cierta',     k:'var(--green)',  bg:'var(--green-soft)',  d:'Lo dice el expediente.'},
+  i: {n:'Incorrecta', k:'var(--red)',    bg:'var(--red-soft)',    d:'El expediente dice otra cosa.'},
+  n: {n:'No consta',  k:'var(--orange)', bg:'var(--orange-soft)', d:'No está en el expediente: la IA lo inventó.'},
 };
+
+const AFIRMACIONES = [
+  'La demandante afirma que ingresó a trabajar el 15 de enero de 2019.',
+  'La empresa sostiene que la relación laboral empezó el 1 de marzo de 2020.',
+  'La carta de renuncia está fechada el 10 de enero de 2025.',
+  'En la audiencia, la demandante reconoció su firma en la carta de renuncia.',
+  'El testigo Jorge Luna declaró que la trabajadora dejó de asistir desde el 6 de enero.',
+  'La testigo Carla Vargas declaró que vio a la demandante en la empresa el 10 de enero.',
+  'La empresa presentó un acta de inventario que prueba el faltante en el almacén.',
+  'La citación a la empresa demandada se practicó el 10 de marzo de 2025.',
+  'La sentencia reconoce una antigüedad de cinco años, once meses y veintiséis días.',
+  'La indemnización de Bs 15.200 se calculó sobre esa antigüedad.',
+  'La sentencia se apoya en el Auto Supremo N.º 245/2018 sobre la carga de la prueba de la renuncia.',
+  'La sentencia se dictó el 18 de agosto de 2025.',
+];
+const CON_NO_APLICA = 10; // índice de la afirmación 11 (permite "No aplica" en la foja)
+const CLAVE = JSON.parse(atob('W1siYyIsMl0sWyJjIiwxM10sWyJpIiwxNl0sWyJpIiwxN10sWyJpIiwyMF0sWyJjIiwyMV0sWyJuIiwxNF0sWyJuIiwxMV0sWyJjIiwyNV0sWyJpIiwyN10sWyJuIiwiTkEiXSxbImMiLDIyXV0='));
+
+/* ============ Utilidades y estado ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let state = {name:'', started:0, r:{}, open:'', submitted:null, attempts:0};
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s && typeof s==='object') state = Object.assign(state, s); }catch(e){}
+
+/* ============ Candado ============ */
+(function(){
+  document.body.classList.add('locked');
+  const lock = $('lock');
+  function abrir(){ lock.remove(); document.body.classList.remove('locked'); }
+  if(!window.CursoHorario){ abrir(); return; }
+  CursoHorario.sincronizar().then(function revisar(){
+    if(!CursoHorario.bloqueada(ACT_ID)){ abrir(); return; }
+    $('lockMsg').textContent = 'Esta actividad se habilita el';
+    $('lockWhen').textContent = CursoHorario.textoApertura(ACT_ID);
+    $('lockLeft').textContent = 'Faltan ' + CursoHorario.faltan(ACT_ID) + '. La página se abrirá sola cuando llegue la hora.';
+    setTimeout(revisar, 30000);
+  });
+})();
+
+/* ============ Consigna y descarga ============ */
+$('consignaStart').innerHTML = CONSIGNA; $('consignaWork').innerHTML = CONSIGNA;
+$('legend').innerHTML = Object.values(OPCIONES).map(o => `<div style="background:${o.bg}"><b style="color:${o.k}">${o.n}</b>${o.d}</div>`).join('');
+const DL_ICO = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>';
+['dlStart','dlWork'].forEach(id => { $(id).href = EXPEDIENTE; $(id).setAttribute('download', 'Expediente_ficticio_laboral_Choque_c_El_Trigal.docx'); });
+$('dlIco1').innerHTML = DL_ICO; $('dlIco2').innerHTML = DL_ICO;
+fetch(EXPEDIENTE, {method:'HEAD', cache:'no-store'}).then(r => { if(!r.ok) throw 0; }).catch(() => {
+  if(location.protocol === 'file:') return; // en la computadora no se puede comprobar
+  ['dlNote1','dlNote2'].forEach(id => $(id).classList.remove('hidden'));
+});
+
+/* ============ Afirmaciones ============ */
+function renderItems(){
+  const box = $('items'); box.innerHTML = '';
+  AFIRMACIONES.forEach((txt, i) => {
+    const r = state.r[i] || {};
+    const el = document.createElement('section'); el.className = 'it' + (r.op ? ' done' : ''); el.id = 'it-' + i;
+    el.innerHTML = `<div class="num">Afirmación ${i+1}</div><p class="t">${esc(txt)}</p>
+      <div class="row">
+        <fieldset><legend>Según el expediente, es:</legend><div class="opts">${Object.keys(OPCIONES).map(k =>
+          `<label class="opt" style="--k:${OPCIONES[k].k}"><input type="radio" name="a${i}" value="${k}"${r.op===k?' checked':''}><span>${OPCIONES[k].n}</span></label>`).join('')}</div></fieldset>
+        <div class="foja"><label for="f${i}">Foja</label>
+          <input type="text" id="f${i}" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="Ej.: 16" value="${r.foja && r.foja!=='NA' ? esc(r.foja) : ''}"${r.foja==='NA'?' disabled':''}>
+          ${i === CON_NO_APLICA ? `<label class="na"><input type="checkbox" id="na${i}"${r.foja==='NA'?' checked':''}> No aplica</label>` : ''}
+        </div>
+      </div>`;
+    el.querySelectorAll('input[type=radio]').forEach(inp => inp.addEventListener('change', () => {
+      state.r[i] = Object.assign(state.r[i] || {}, {op: inp.value}); save(); el.classList.add('done'); count();
+    }));
+    const f = el.querySelector('#f' + i);
+    f.addEventListener('input', () => { f.value = f.value.replace(/\D/g, ''); state.r[i] = Object.assign(state.r[i] || {}, {foja: f.value}); save(); });
+    const na = el.querySelector('#na' + i);
+    if(na) na.addEventListener('change', () => {
+      f.disabled = na.checked; if(na.checked) f.value = '';
+      state.r[i] = Object.assign(state.r[i] || {}, {foja: na.checked ? 'NA' : ''}); save();
+    });
+    box.appendChild(el);
+  });
+  $('openQ').value = state.open || ''; updCounter(); count();
+}
+function updCounter(){ $('openCount').textContent = ($('openQ').value.length) + ' / 500'; }
+$('openQ').addEventListener('input', () => { state.open = $('openQ').value; save(); updCounter(); });
+function count(){ const n = AFIRMACIONES.filter((_, i) => state.r[i] && state.r[i].op).length; $('countPill').textContent = n + ' de 12 respondidas'; }
+
+/* ============ Calificación ============ */
+function grade(){
+  let cls = 0, fj = 0;
+  CLAVE.forEach(([op, foja], i) => {
+    const r = state.r[i] || {};
+    if(r.op === op) cls++;
+    if(foja === 'NA' ? r.foja === 'NA' : (r.foja && Number(r.foja) === foja)) fj++;
+  });
+  return {cls, fj, total: cls + fj, score: Math.round((cls + fj) / 24 * 100)};
+}
+
+/* ============ Resultados ============ */
+function showResults(g){
+  ['scrStart','scrWork','submitBtn','countPill'].forEach(id => $(id).classList.add('hidden'));
+  $('scrResult').classList.remove('hidden');
+  $('whoPill').textContent = state.name; $('whoPill').classList.remove('hidden');
+  const first = state.name.split(' ')[0];
+  $('scoreNum').innerHTML = g.score + '<small>/100</small>';
+  $('scoreTitle').textContent = g.score >= 85 ? 'Excelente verificación, ' + first : g.score >= 60 ? 'Buen trabajo, ' + first : 'Gracias por tu entrega, ' + first;
+  $('scoreMsg').textContent = 'Obtuviste ' + g.total + ' de 24 puntos: ' + g.cls + ' por clasificar bien las afirmaciones y ' + g.fj + ' por encontrar la foja correcta.';
+  $('stats').innerHTML = [['Clasificación', g.cls + '/12', 'green'], ['Fojas', g.fj + '/12', 'navy'], ['Total', g.total + '/24', 'orange']]
+    .map(([l,v,c]) => `<div class="stat" style="background:var(--${c}-soft);color:var(--${c})"><b>${v}</b>${l}</div>`).join('');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============ Envío a Google Sheets ============ */
+async function send(g){
+  const st = $('sendStatus');
+  if(!SHEETS_URL){ st.textContent = 'Registro de notas no configurado: muestra esta pantalla a tu docente.'; return; }
+  st.textContent = 'Enviando tu resultado al docente...';
+  const datos = {
+    'Nombre': state.name, 'Actividad': 'Actividad 4', 'Nota (/100)': g.score,
+    'Puntos clasificación (/12)': g.cls, 'Puntos foja (/12)': g.fj,
+    'Intento': state.attempts, 'Minutos': Math.round((Date.now() - state.started) / 60000)
+  };
+  AFIRMACIONES.forEach((_, i) => {
+    const r = state.r[i] || {};
+    datos['A' + (i+1)] = (r.op ? OPCIONES[r.op].n : 'Sin responder') + ' · foja ' + (r.foja === 'NA' ? 'No aplica' : (r.foja || '—'));
+  });
+  datos['¿Qué afirmación te costó más verificar y por qué?'] = (state.open || '').trim();
+  datos['Navegador'] = navigator.userAgent.slice(0, 120);
+  try{
+    await fetch(SHEETS_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({hoja: HOJA, datos})});
+    st.className = 'send ok'; st.textContent = 'Resultado enviado al docente.';
+  }catch(e){ st.className = 'send bad'; st.textContent = 'No se pudo enviar el resultado. Toma una captura de esta pantalla y envíala a tu docente.'; }
+}
+
+/* ============ Modal ============ */
+function modal(title, text, actions){
+  $('modalT').textContent = title; $('modalP').textContent = text; const a = $('modalA'); a.innerHTML = '';
+  actions.forEach(([l, p, fn]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (p ? ' btn-primary' : ''); b.textContent = l; b.onclick = () => { $('modal').classList.add('hidden'); fn && fn(); }; a.appendChild(b); });
+  $('modal').classList.remove('hidden'); a.lastChild.focus();
+}
+
+/* ============ Flujo ============ */
+if(state.name) $('nameInput').value = state.name;
+$('startBtn').onclick = () => {
+  const n = $('nameInput').value.trim().replace(/\s+/g, ' ');
+  if(n.split(' ').length < 2){ $('nameErr').textContent = 'Escribe tu nombre y al menos un apellido, para que tu docente pueda identificar tu entrega.'; $('nameInput').focus(); return; }
+  if(state.name !== n){ state.r = {}; state.open = ''; state.submitted = null; }
+  state.name = n; state.started = state.started || Date.now(); save();
+  $('scrStart').classList.add('hidden'); $('scrWork').classList.remove('hidden');
+  $('whoPill').textContent = n; ['whoPill','countPill','submitBtn'].forEach(id => $(id).classList.remove('hidden'));
+  renderItems(); window.scrollTo(0, 0);
+};
+$('nameInput').addEventListener('keydown', e => { if(e.key === 'Enter') $('startBtn').click(); });
+function irA(id){ const el = $(id); el.scrollIntoView({behavior:'smooth', block:'center'}); }
+function entregar(){
+  const sinOp = AFIRMACIONES.map((_, i) => i).filter(i => !(state.r[i] && state.r[i].op));
+  if(sinOp.length){ modal('Te faltan ' + sinOp.length + (sinOp.length===1?' afirmación':' afirmaciones'), 'Indica si cada afirmación es cierta, incorrecta o no consta. La primera pendiente es la ' + (sinOp[0]+1) + '.', [['Ir a la pendiente', true, () => irA('it-' + sinOp[0])]]); return; }
+  if(!(state.open || '').trim()){ modal('Falta la pregunta final', 'Responde brevemente qué afirmación te costó más verificar y por qué. No tiene nota.', [['Ir a la pregunta', true, () => { irA('openQ'); $('openQ').focus(); }]]); return; }
+  const sinFoja = AFIRMACIONES.map((_, i) => i).filter(i => !(state.r[i] && state.r[i].foja));
+  const aviso = sinFoja.length ? 'Dejaste ' + sinFoja.length + (sinFoja.length===1?' foja vacía':' fojas vacías') + ' (afirmación ' + sinFoja.map(i=>i+1).join(', ') + '); se contarán como incorrectas. ' : '';
+  modal('¿Entregar la actividad?', aviso + 'Después de entregar verás tu puntaje y ya no podrás cambiar tus respuestas.', [
+    ['Seguir revisando', false],
+    ['Entregar', true, () => { state.attempts = (state.attempts || 0) + 1; const g = grade(); state.submitted = {score: g.score}; save(); showResults(g); send(g); }]
+  ]);
+}
+$('submitBtn').onclick = entregar; $('submitBtn2').onclick = entregar;
+if(state.name && state.submitted){ showResults(grade()); $('sendStatus').textContent = 'Esta actividad ya fue entregada desde este navegador.'; }
 </script>
-<script src="../motor.js"></script>
 <script src="../materiales.js"></script>
 </body>
 </html>
